@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "valtimo-backend.fullname" . }}
+  labels:
+    {{- include "gzac-backend.labels" . | nindent 4 }}
+data:
+  SPRING_PROFILES_ACTIVE: {{ .Values.settings.spring.profiles.active | quote }}
+  SPRINGACTUATOR_USERNAME: {{ .Values.settings.spring.actuator.username | quote }}
+  SPRING_DATASOURCE_URL: {{ .Values.settings.spring.datasource.url | quote }}
+  SPRING_DATASOURCE_USERNAME: {{ .Values.settings.spring.datasource.username | quote }}
+  KEYCLOAK_AUTHSERVERURL: {{ .Values.settings.keycloak.authServerURL | quote }}
+  KEYCLOAK_RESOURCE: {{ .Values.settings.keycloak.clientID | quote }}
+  KEYCLOAK_REALM: {{ .Values.settings.keycloak.realm | quote }}
+  KEYCLOAK_PUBLIC_KEY: {{ .Values.settings.keycloak.publicKey | quote }}
+  VALTIMO_APP_HOSTNAME: {{ .Values.settings.valtimo.appHostname | quote }}
+  VALTIMO_DATABASE: {{ .Values.settings.valtimo.databaseType | quote }}
+  CAMUNDA_BPM_ADMINUSER_ID: {{ .Values.settings.camunda.adminUserID | quote }}

@@ -1,0 +1,156 @@
+# Default values for gzac-frontend.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Amount of replicas running the gzac-frontend
+replicaCount: 1
+
+image:
+  # -- Domain of the image repository
+  repository: ""
+  # -- Pull policy for the image
+  pullPolicy: IfNotPresent
+  # -- Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# -- Image pull secrets
+imagePullSecrets: []
+# -- Name override for gzac-frontend
+nameOverride: ""
+# -- String to fully override valitmo-frontend.fullname
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Annotations for gzac-frontend pods
+podAnnotations: {}
+
+# -- Labels for gzac-frontend pods
+podLabels: {}
+
+podSecurityContext: 
+  # -- Set gzac-frontend's pod security fsGroup
+  fsGroup: 2000
+
+securityContext: 
+  capabilities:
+    # -- gzac-frontend's container security context capabilities to be dropped
+    drop:
+    - ALL
+  # -- gzac-frontend's container security context readOnlyRootFilesystem
+  readOnlyRootFilesystem: false
+  # -- Run gzac-frontend containers as non-root
+  runAsNonRoot: true
+  # -- Run gzac-frontend containers under this user-ID
+  runAsUser: 1000
+
+service:
+  # -- gzac-frontend service type
+  type: ClusterIP
+  # -- gzac-frontend service port
+  port: 80
+
+ingress:
+  # -- Expose the gzac-frontend UI through an ingress
+  enabled: false
+  # -- Ingress Class which will be used to implement the Ingress
+  className: ""
+  # -- Ingress annotations
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    # -- Ingress hostname
+    - host: chart-example.local
+      paths:
+        # -- Ingress path
+        - path: /
+          # --  Ingress path type
+          pathType: ImplementationSpecific
+  # -- Enable TLS for the Ingress
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+livenessProbe:
+  # -- Initial delay seconds for livenessProbe
+  initialDelaySeconds: 10
+  # -- Period seconds for livenessProbe
+  periodSeconds: 10
+  # -- Timeout seconds for livenessProbe
+  timeoutSeconds: 1
+  # -- Failure threshold for livenessProbe
+  failureThreshold: 6
+  # -- Success threshold for livenessProbe
+  successThreshold: 1
+
+readinessProbe:
+  # -- Initial delay seconds for readinessProbe
+  initialDelaySeconds: 5
+  # -- Period seconds for readinessProbe
+  periodSeconds: 10
+  # -- Timeout seconds for readinessProbe
+  timeoutSeconds: 1
+  # -- Failure threshold for readinessProbe
+  failureThreshold: 6
+  # -- Success threshold for readinessProbe
+  successThreshold: 1
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  # -- Enable/disable autoscaling for the gzac-frontend deployment
+  enabled: false
+  # -- Minimum replicas for the gzac-frontend deployment
+  minReplicas: 1
+  # -- Maximum replicas for the gzac-frontend deployment
+  maxReplicas: 100
+  # -- gzac-frontend Deployment autoscaling target CPU percentage
+  targetCPUUtilizationPercentage: 80
+  # -- gzac-frontend Deployment autoscaling target Mem utilization percentage
+  targetMemoryUtilizationPercentage: 80
+
+# -- Node labels for gzac-frontend pods assignment
+nodeSelector: {}
+
+# -- Tolerations for gzac-frontend pods assignment
+tolerations: []
+
+# -- Affinity for gzac-frontend pods assignment
+affinity: {}
+
+settings: 
+  # -- URL where the gzac-API is located
+  apiURL: ""
+  # -- Domain on which the app can run
+  whitelistedDomain: ""
+
+  keycloak:
+    # -- URL which exposes Keycloak
+    url: ""
+    # -- ClientID to use for authentication
+    clientID: ""
+    # -- Keycloak realm
+    realm: ""
+    # -- The URL to redirect to after logout
+    logoutRedirectURL: ""
+    # -- The URL to redirect to after a succesfull login
+    redirectURL: ""

@@ -1,0 +1,4 @@
+**/charts/*.tgz
+.idea
+**/Chart.lock
+.DS_Store

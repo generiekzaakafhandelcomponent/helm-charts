@@ -1,0 +1,232 @@
+# Default values for valtimo-backend.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+tags:
+  # -- Deploy a PostgreSQL instance
+  postgresql: true
+  # -- Deploy a MySQL instance
+  mysql: false
+  # -- Deploy a Keycloak instance
+  keycloak: true
+
+# -- Amount of replicas running the gzac-backend
+replicaCount: 1
+
+image:
+  # -- Domain of the image repository
+  repository: ""
+  # -- Pull policy for the image
+  pullPolicy: IfNotPresent
+  # -- Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# -- Image pull secrets
+imagePullSecrets: []
+# -- Name override for gzac-Backend
+nameOverride: ""
+# -- String to fully override valitmo-backend.fullname
+fullnameOverride: ""
+
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- Annotations to add to the service account
+  annotations: {}
+  # -- The name of the service account to use.
+  # -- If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Annotations for gzac-backend pods
+podAnnotations: {}
+
+# -- Labels for gzac-backend pods
+podLabels: {}
+
+podSecurityContext: 
+  # -- Set gzac-backend's pod security fsGroup
+  fsGroup: 2000
+
+securityContext: 
+  capabilities:
+    # -- gzac-backend's container security context capabilities to be dropped
+    drop:
+    - ALL
+  # -- gzac-backend's container security context readOnlyRootFilesystem
+  readOnlyRootFilesystem: false
+  # -- Run gzac-backend containers as non-root
+  runAsNonRoot: true
+  # -- Run gzac-backend containers under this user-ID
+  runAsUser: 1000
+
+service:
+  # -- gzac-backend service type
+  type: ClusterIP
+  # -- gzac-backend service port
+  port: 80
+
+ingress:
+  # -- Expose the gzac-backend UI through an ingress
+  enabled: false
+  # -- Ingress Class which will be used to implement the Ingress
+  className: ""
+  # -- Ingress annotations
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    # -- Ingress hostname
+    - host: chart-example.local
+      paths:
+        # -- Ingress path
+        - path: /
+          # --  Ingress path type
+          pathType: ImplementationSpecific
+  # -- Enable TLS for the Ingress
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+livenessProbe:
+  # -- Initial delay seconds for livenessProbe
+  initialDelaySeconds: 40
+  # -- Period seconds for livenessProbe
+  periodSeconds: 10
+  # -- Timeout seconds for livenessProbe
+  timeoutSeconds: 1
+  # -- Failure threshold for livenessProbe
+  failureThreshold: 6
+  # -- Success threshold for livenessProbe
+  successThreshold: 1
+
+readinessProbe:
+  # -- Initial delay seconds for readinessProbe
+  initialDelaySeconds: 20
+  # -- Period seconds for readinessProbe
+  periodSeconds: 10
+  # -- Timeout seconds for readinessProbe
+  timeoutSeconds: 1
+  # -- Failure threshold for readinessProbe
+  failureThreshold: 6
+  # -- Success threshold for readinessProbe
+  successThreshold: 1
+
+# -- Resources for gzac-backend
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  # -- Enable/disable autoscaling for the gzac-backend deployment
+  enabled: false
+  # -- Minimum replicas for the gzac-backend deployment
+  minReplicas: 1
+  # -- Maximum replicas for the gzac-backend deployment
+  maxReplicas: 100
+  # -- gzac-backend Deployment autoscaling target CPU percentage
+  targetCPUUtilizationPercentage: 80
+  # -- gzac-backend Deployment autoscaling target Mem utilization percentage
+  targetMemoryUtilizationPercentage: 80
+
+# -- Node labels for gzac-backend pods assignment
+nodeSelector: {}
+
+# -- Tolerations for gzac-backend pods assignment
+tolerations: []
+
+# -- Affinity for gzac-backend pods assignment
+affinity: {}
+
+# -- Refer to an existing secret to avoid managing secrets through Helm.
+existingSecret: null
+
+settings:
+
+  spring: 
+    profiles:
+      # -- Activated Spring profiles
+      active: "cloud"
+    actuator: 
+      # -- Username to access the Spring actuator endpoint
+      username: "admin"
+      # -- Password to access the Spring actuator endpoint
+      password: ""
+    datasource: 
+      # -- URL for the database
+      url: 
+      # -- Username for the database
+      username: 
+      # -- Password for the database
+      password: ""
+    
+  keycloak: 
+    # -- URL of Keycloak
+    authServerURL: 
+    # -- Keycloak realm
+    realm: 
+    # -- Client-ID to connect with Keycloak
+    clientID: 
+    # -- Client-Secret to connect with Keycloak
+    clientSecret: ""
+    # -- Keycloak's Public Key used to verify signature of JWTs
+    publicKey: 
+
+  gzac:
+    # -- Type of database to use (can by either 'postgres' or 'mysql')
+    databaseType: "postgres"
+    # -- The hostname which exposes gzac-backend
+    appHostName: 
+    # -- The port on which gzac-backend is listening
+    serverPort: 8080
+    # -- Encryption secret
+    connectorEncryptionSecret: ""
+
+  camunda: 
+    # -- Default Camunda admin user
+    adminUserID: "admin"
+    # -- Default Camunda admin password
+    adminUserPassword: ""
+
+##########################################################################
+## PostgreSQL subchart                                                  ##
+## https://artifacthub.io/packages/helm/bitnami/postgresql?modal=values ##
+##########################################################################
+# -- Postgresql subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/postgresql?modal=values for all possible values
+postgresql:
+  auth:
+    postgresPassword: ""
+    existingSecret: ""
+    secretKeys:
+      adminPasswordKey: ""
+      userPasswordKey: ""
+      replicationPasswordKey: ""
+
+########################################################################
+## MySQL subchart                                                     ##
+## https://artifacthub.io/packages/helm/bitnami/mysql?modal=values    ##
+########################################################################
+# -- MySQL subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/mysql?modal=values for all possible values
+mysql:
+  auth:
+    rootPassword: ""
+    existingSecret: ""
+
+########################################################################
+## Keycloak subchart                                                  ##
+## https://artifacthub.io/packages/helm/bitnami/keycloak?modal=values ##
+########################################################################
+# -- Keycloak subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/keycloak?modal=values for all possible values
+keycloak: 
+  auth:
+    adminUser: user
+    adminPassword: ""
+    existingSecret: ""
