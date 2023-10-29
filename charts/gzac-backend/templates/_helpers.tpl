@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "valtimo-backend.name" -}}
+{{- define "gzac-backend.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "valtimo-backend.fullname" -}}
+{{- define "gzac-backend.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "valtimo-backend.chart" -}}
+{{- define "gzac-backend.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "valtimo-backend.labels" -}}
-helm.sh/chart: {{ include "valtimo-backend.chart" . }}
-{{ include "valtimo-backend.selectorLabels" . }}
+{{- define "gzac-backend.labels" -}}
+helm.sh/chart: {{ include "gzac-backend.chart" . }}
+{{ include "gzac-backend.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "valtimo-backend.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "valtimo-backend.name" . }}
+{{- define "gzac-backend.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "gzac-backend.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "valtimo-backend.serviceAccountName" -}}
+{{- define "gzac-backend.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "valtimo-backend.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "gzac-backend.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
