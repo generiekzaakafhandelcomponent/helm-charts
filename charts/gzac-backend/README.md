@@ -1,6 +1,6 @@
 # gzac-backend
 
-![Version: 0.1.5](https://img.shields.io/badge/Version-0.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.1.0](https://img.shields.io/badge/AppVersion-0.1.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -44,6 +44,12 @@ A Helm chart for Kubernetes
 | mysql | object | `{"auth":{"existingSecret":"","rootPassword":""}}` | MySQL subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/mysql?modal=values for all possible values |
 | nameOverride | string | `""` | Name override for gzac-Backend |
 | nodeSelector | object | `{}` | Node labels for gzac-backend pods assignment |
+| persistence.annotations | object | `{}` |  |
+| persistence.enabled | bool | `false` | Enable/disable persistent volumes for Gzac-backend |
+| persistence.existingClaim | string | `nil` | persistence.existingClaim The name of an existing PVC to use for persistence |
+| persistence.mountPath | string | `"/tmp"` | persistence.mountPath Path to mount the volume at. |
+| persistence.size | string | `"1Gi"` | persistence.size Size of data volume |
+| persistence.storageClass | string | `""` |  |
 | podAnnotations | object | `{}` | Annotations for gzac-backend pods |
 | podLabels | object | `{}` | Labels for gzac-backend pods |
 | podSecurityContext.fsGroup | int | `2000` | Set gzac-backend's pod security fsGroup |
