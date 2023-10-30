@@ -13,6 +13,6 @@ data:
   KEYCLOAK_RESOURCE: {{ .Values.settings.keycloak.clientID | quote }}
   KEYCLOAK_REALM: {{ .Values.settings.keycloak.realm | quote }}
   KEYCLOAK_PUBLIC_KEY: {{ .Values.settings.keycloak.publicKey | quote }}
-  VALTIMO_APP_HOSTNAME: {{ .Values.settings.valtimo.appHostname | quote }}
-  VALTIMO_DATABASE: {{ .Values.settings.valtimo.databaseType | quote }}
+  VALTIMO_APP_HOSTNAME: {{ .Values.settings.gzac.appHostname | quote }}
+  VALTIMO_DATABASE: {{ .Values.settings.gzac.databaseType | quote }}
   CAMUNDA_BPM_ADMINUSER_ID: {{ .Values.settings.camunda.adminUserID | quote }}
