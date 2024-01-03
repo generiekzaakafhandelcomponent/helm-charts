@@ -146,9 +146,6 @@ tolerations: []
 # -- Affinity for gzac-backend pods assignment
 affinity: {}
 
-# -- Refer to an existing secret to avoid managing secrets through Helm.
-existingSecret: null
-
 # -- Array with extra environment variables to add
 extraEnvVars: []
 # e.g:
@@ -170,6 +167,9 @@ extraVolumeMounts: []
 # extraVolumeMounts:
 #  - name: verify-certs
 #    mountPath: /etc/ssl/certs/extra-certs/
+
+# -- Refer to an existing secret to avoid managing secrets through Helm.
+existingSecret: null
 
 persistence:
   # -- Enable/disable persistent volumes for Gzac-backend
