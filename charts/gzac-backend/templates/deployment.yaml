@@ -48,6 +48,10 @@ spec:
                 name: {{ .Values.existingSecret | default (include "gzac-backend.fullname" .) }}
             - configMapRef:
                 name: {{ include "gzac-backend.fullname" . }}
+          env:
+            {{- if .Values.extraEnvVars }}
+            {{- include "gzac-backend.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080
@@ -60,6 +64,9 @@ spec:
           volumeMounts:
             - name: media
               mountPath: {{ .Values.persistence.mountPath }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "gzac-backend.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
       volumes:
         - name: media
           {{- if .Values.persistence.enabled }}
@@ -67,6 +74,9 @@ spec:
             claimName: {{ if .Values.persistence.existingClaim }}{{ .Values.persistence.existingClaim }}{{- else }}{{ include "gzac-backend.fullname" . }}{{- end }}
           {{- else }}
           emptyDir: { }
+        {{- if .Values.extraVolumes }}
+        {{- include "gzac-backend.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

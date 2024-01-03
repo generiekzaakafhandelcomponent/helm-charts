@@ -149,6 +149,28 @@ affinity: {}
 # -- Refer to an existing secret to avoid managing secrets through Helm.
 existingSecret: null
 
+# -- Array with extra environment variables to add
+extraEnvVars: []
+# e.g:
+# extraEnvVars:
+#   - name: FOO
+#     value: "bar"
+
+# -- Optionally specify extra list of additional volumes
+extraVolumes: []
+# e.g:
+# extraVolumes:
+#   - name: verify-certs
+#     configMap:
+#       name: verify-certs
+
+# -- Optionally specify extra list of additional volumeMounts
+extraVolumeMounts: []
+# e.g:
+# extraVolumeMounts:
+#  - name: verify-certs
+#    mountPath: /etc/ssl/certs/extra-certs/
+
 persistence:
   # -- Enable/disable persistent volumes for Gzac-backend
   enabled: false
