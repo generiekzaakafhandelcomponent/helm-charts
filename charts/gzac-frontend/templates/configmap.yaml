@@ -12,4 +12,4 @@ data:
   KEYCLOAK_REDIRECT_URI: {{ .Values.settings.keycloak.redirectURL | quote }}
   API_URI: {{ .Values.settings.apiURL | quote }}
   WHITELISTED_DOMAIN: {{ .Values.settings.whitelistedDomain | quote }}
-  TEST_VALUE: "random value"
+  ENABLE_CASE_WIDGETS: {{ .Values.settings.enableCaseWidgets | quote }}
