@@ -13,3 +13,5 @@ data:
   API_URI: {{ .Values.settings.apiURL | quote }}
   WHITELISTED_DOMAIN: {{ .Values.settings.whitelistedDomain | quote }}
   ENABLE_CASE_WIDGETS: {{ .Values.settings.enableCaseWidgets | quote }}
+  ENABLE_TASK_FILTERING: {{ .Values.settings.enableTaskFiltering | quote }}
+
