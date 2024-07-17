@@ -154,7 +154,3 @@ settings:
     logoutRedirectURL: ""
     # -- The URL to redirect to after a succesfull login
     redirectURL: ""
-
-    # -- Feature toggles
-    enableCaseWidgets: false
-    enableTaskFiltering: false
