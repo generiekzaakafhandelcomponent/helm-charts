@@ -3,6 +3,32 @@ entries:
   gzac-backend:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2024-07-17T14:26:19.602044403Z"
+    dependencies:
+    - name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - postgresql
+      version: ~12.5.6
+    - name: mysql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - mysql
+      version: ~9.10.1
+    - name: keycloak
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - keycloak
+      version: ~15.1.2
+    description: A Helm chart for Kubernetes
+    digest: 1847e4c72d60eb2fcc7b42b0cf4d565035d2dfa7e348fc66bfbe1e2f1d25ad5f
+    name: gzac-backend
+    type: application
+    urls:
+    - https://github.com/generiekzaakafhandelcomponent/helm-charts/releases/download/gzac-backend-0.1.3/gzac-backend-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2024-05-23T12:57:39.14327534Z"
     dependencies:
     - name: postgresql
@@ -82,6 +108,16 @@ entries:
   gzac-frontend:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2024-07-17T14:26:19.713424737Z"
+    description: A Helm chart for Kubernetes
+    digest: 87b74468d9d353c71dbab0b859771ce468b6cb4ca10d05e01ff86c73e8c6d27a
+    name: gzac-frontend
+    type: application
+    urls:
+    - https://github.com/generiekzaakafhandelcomponent/helm-charts/releases/download/gzac-frontend-0.1.3/gzac-frontend-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2024-05-23T12:57:39.30741648Z"
     description: A Helm chart for Kubernetes
     digest: 406ac6d5a399b4d5a1fd568cdd6927030392862a434c5ddb8b6629ad44a2c835
@@ -110,4 +146,4 @@ entries:
     urls:
     - https://github.com/generiekzaakafhandelcomponent/helm-charts/releases/download/gzac-frontend-0.1.0/gzac-frontend-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-23T12:57:39.307440365Z"
+generated: "2024-07-17T14:26:19.713453069Z"
