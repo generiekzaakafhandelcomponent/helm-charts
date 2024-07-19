@@ -219,7 +219,9 @@ settings:
     # -- Client-Secret to connect with Keycloak
     clientSecret: ""
     # -- Keycloak's Public Key used to verify signature of JWTs
-    publicKey: 
+    publicKey:
+    # -- Keycloak client - used to retrieve client roles
+    client:
 
   gzac:
     # -- Type of database to use (can by either 'postgres' or 'mysql')

@@ -12,6 +12,7 @@ data:
   KEYCLOAK_AUTHSERVERURL: {{ .Values.settings.keycloak.authServerURL | quote }}
   KEYCLOAK_RESOURCE: {{ .Values.settings.keycloak.clientID | quote }}
   KEYCLOAK_REALM: {{ .Values.settings.keycloak.realm | quote }}
+  VALTIMO_KEYCLOAK_CLIENT: {{ .Values.settings.keycloak.client | quote }}
   VALTIMO_OAUTH_PUBLIC_KEY: {{ .Values.settings.keycloak.publicKey | quote }}
   VALTIMO_APP_HOSTNAME: {{ .Values.settings.gzac.appHostname | quote }}
   VALTIMO_DATABASE: {{ .Values.settings.gzac.databaseType | quote }}
