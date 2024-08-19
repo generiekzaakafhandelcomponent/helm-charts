@@ -14,5 +14,6 @@ data:
   WHITELISTED_DOMAIN: {{ .Values.settings.whitelistedDomain | quote }}
   ENABLE_CASE_WIDGETS: {{ .Values.settings.enableCaseWidgets | quote }}
   ENABLE_TASK_FILTERING: {{ .Values.settings.enableTaskFiltering | quote }}
+  ENABLE_TASK_PANEL: {{ .Values.settings.enableTaskPanel | quote }}
   SOME_ENV_VAR: {{ .Values.settings.someEnvVar | quote }}
 
