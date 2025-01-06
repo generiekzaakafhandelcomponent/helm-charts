@@ -9,7 +9,7 @@ data:
   SPRINGACTUATOR_USERNAME: {{ .Values.settings.spring.actuator.username | quote }}
   SPRING_DATASOURCE_URL: {{ .Values.settings.spring.datasource.url | quote }}
   SPRING_DATASOURCE_USERNAME: {{ .Values.settings.spring.datasource.username | quote }}
-  KEYCLOAK_AUTHSERVERURL: {{ .Values.settings.keycloak.authServerURL | quote }}
+  KEYCLOAK_AUTH_SERVER_URL: {{ .Values.settings.keycloak.authServerURL | quote }}
   KEYCLOAK_RESOURCE: {{ .Values.settings.keycloak.clientID | quote }}
   KEYCLOAK_REALM: {{ .Values.settings.keycloak.realm | quote }}
   VALTIMO_KEYCLOAK_CLIENT: {{ .Values.settings.keycloak.client | quote }}
