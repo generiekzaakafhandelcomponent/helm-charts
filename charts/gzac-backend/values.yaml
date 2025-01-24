@@ -1,7 +1,6 @@
 # Default values for gzac-backend.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
 tags:
   # -- Deploy a PostgreSQL instance
   postgresql: true
