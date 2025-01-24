@@ -290,6 +290,16 @@ entries:
   gzac-frontend:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2025-01-24T08:57:59.323778245Z"
+    description: A Helm chart for Kubernetes
+    digest: 3f043cfbf644fc2c6e902603b7e4f1f384cda4b41759cb917f85d76c2a4fd693
+    name: gzac-frontend
+    type: application
+    urls:
+    - https://github.com/generiekzaakafhandelcomponent/helm-charts/releases/download/gzac-frontend-0.1.13/gzac-frontend-0.1.13.tgz
+    version: 0.1.13
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2024-08-19T11:30:50.989099146Z"
     description: A Helm chart for Kubernetes
     digest: 426b53f042e9b654807381e93896c3ab91900f3db8ec40e91c4c9af751d2bdab
@@ -398,4 +408,4 @@ entries:
     urls:
     - https://github.com/generiekzaakafhandelcomponent/helm-charts/releases/download/gzac-frontend-0.1.0/gzac-frontend-0.1.0.tgz
     version: 0.1.0
-generated: "2024-08-19T11:30:50.989207208Z"
+generated: "2025-01-24T08:57:59.323892579Z"
