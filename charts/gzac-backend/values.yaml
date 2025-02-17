@@ -219,6 +219,8 @@ settings:
     clientSecret: ""
     # -- Keycloak's Public Key used to verify signature of JWTs
     publicKey:
+    # -- Default the Token is valid 1 hour
+    tokenValidityInSeconds:
     # -- Keycloak client - used to retrieve client roles
     client:
 

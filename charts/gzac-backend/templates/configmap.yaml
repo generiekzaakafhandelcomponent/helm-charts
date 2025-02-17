@@ -14,11 +14,7 @@ data:
   KEYCLOAK_REALM: {{ .Values.settings.keycloak.realm | quote }}
   VALTIMO_KEYCLOAK_CLIENT: {{ .Values.settings.keycloak.client | quote }}
   VALTIMO_OAUTH_PUBLIC_KEY: {{ .Values.settings.keycloak.publicKey | quote }}
+  VALTIMO_OAUTH_TOKEN_VALIDITY_IN_SECONDS: {{ .Values.settings.keycloak.tokenValidityInSeconds | quote }}
   VALTIMO_APP_HOSTNAME: {{ .Values.settings.gzac.appHostname | quote }}
   VALTIMO_DATABASE: {{ .Values.settings.gzac.databaseType | quote }}
   CAMUNDA_BPM_ADMINUSER_ID: {{ .Values.settings.camunda.adminUserID | quote }}
-  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWTSETURI: {{ .Values.settings.spring.security.oauth2.resourceserver.jwt.jwkSetUri | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKJWT_ISSUERURI: {{ .Values.settings.spring.security.oauth2.client.provider.keycloakjwt.issuerUri | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ .Values.settings.spring.security.oauth2.client.provider.keycloakapi.issuerUri | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKJWT_CLIENTID: {{ .Values.settings.spring.security.oauth2.client.registration.keycloakjwt.clientId | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTID: {{ .Values.settings.spring.security.oauth2.client.registration.keycloakapi.clientId | quote }}
