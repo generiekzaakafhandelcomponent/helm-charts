@@ -207,6 +207,24 @@ settings:
       username: 
       # -- Password for the database
       password: ""
+    # -- oauth2 for keycloak. Use either this is the keycloak config below
+    security:
+      oauth2:
+        resourceserver:
+          jwt:
+            jwkSetUri:
+        client:
+          provider:
+            keycloakjwt:
+              issuerUri:
+            keycloakapi:
+              issuerUri:
+          registration:
+            keycloakjwt:
+              clientId:
+            keycloakapi:
+              clientId:
+              clientSecret:
     
   keycloak: 
     # -- URL of Keycloak
