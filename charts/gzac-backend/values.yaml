@@ -207,7 +207,7 @@ settings:
       username: 
       # -- Password for the database
       password: ""
-    # -- oauth2 for keycloak. Use either this is the keycloak config below
+    # -- oauth2 for keycloak. Use either this or the keycloak config
     security:
       oauth2:
         resourceserver:
