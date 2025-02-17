@@ -217,7 +217,7 @@ settings:
     clientID: 
     # -- Client-Secret to connect with Keycloak
     clientSecret: ""
-    # -- Keycloak's Public Key used to verify signature of JWTs
+    # -- Keycloak's Public Key used to verify signature of JWTs. Known as valtimo_jwt_secret in release 10.
     publicKey:
     # -- Keycloak client - used to retrieve client roles
     client:
