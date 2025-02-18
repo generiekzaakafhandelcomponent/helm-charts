@@ -6,6 +6,8 @@ on:
       - 'charts/gzac-backend/**'
     branches:
       - main
+      - release/1.x.x
+      - release/2.x.x
 
 jobs:
   build_gzac_backend:
