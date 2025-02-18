@@ -21,4 +21,3 @@ dependencies:
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - keycloak
-
