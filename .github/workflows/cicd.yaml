@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      - Release/1.x.x
+      - Release/2.x.x
 
 jobs:
   build:
