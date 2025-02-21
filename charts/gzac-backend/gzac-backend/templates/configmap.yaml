@@ -18,6 +18,7 @@ data:
   VALTIMO_DATABASE: {{ .Values.settings.gzac.databaseType | quote }}
   CAMUNDA_BPM_ADMINUSER_ID: {{ .Values.settings.camunda.adminUserID | quote }}
   SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWTSETURI: {{ .Values.settings.spring.security.oauth2.resourceserver.jwt.jwkSetUri | quote }}
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: {{ .Values.settings.spring.security.oauth2.resourceserver.jwt.jwkSetUri | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKJWT_ISSUERURI: {{ .Values.settings.spring.security.oauth2.client.provider.keycloakjwt.issuerUri | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ .Values.settings.spring.security.oauth2.client.provider.keycloakapi.issuerUri | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKJWT_CLIENTID: {{ .Values.settings.spring.security.oauth2.client.registration.keycloakjwt.clientId | quote }}
