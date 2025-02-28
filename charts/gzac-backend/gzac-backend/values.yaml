@@ -14,11 +14,11 @@ replicaCount: 1
 
 image:
   # -- Domain of the image repository
-  repository: ""
+  repository: "ritense/gzac-backend"
   # -- Pull policy for the image
   pullPolicy: IfNotPresent
   # -- Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: 12.2.1
 
 # -- Image pull secrets
 imagePullSecrets: []
@@ -68,7 +68,13 @@ ingress:
   # -- Expose the gzac-backend UI through an ingress
   enabled: false
   # -- Ingress Class which will be used to implement the Ingress
-  className: ""
+  ingressClassName: ""
+  # -- When set to true additional annotions are set
+  useAwsLoadBalancerControllerAnnotationAction:
+    enabled: false
+    # -- Named port. This setting the portName you can't use a port number.
+    portName: use-annotation
+
   # -- Ingress annotations
   annotations: {}
     # kubernetes.io/ingress.class: nginx
