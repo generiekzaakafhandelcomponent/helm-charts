@@ -69,12 +69,6 @@ ingress:
   enabled: false
   # -- Ingress Class which will be used to implement the Ingress
   ingressClassName: ""
-  # -- When set to true additional annotions are set
-  useAwsLoadBalancerControllerAnnotationAction:
-    enabled: false
-    # -- Named port. This setting the portName you can't use a port number.
-    portName: use-annotation
-
   # -- Ingress annotations
   annotations: {}
     # kubernetes.io/ingress.class: nginx
@@ -87,6 +81,14 @@ ingress:
         - path: /
           # --  Ingress path type
           pathType: ImplementationSpecific
+      # -- Setting a port name will overwrite the use of a port number. Setting the service name overwrites the default valtimo-backend.fullname
+      # - path: /api
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: valtimo-backend
+      #       port:
+      #         name: use-annotation
   # -- Enable TLS for the Ingress
   tls: []
   #  - secretName: chart-example-tls
