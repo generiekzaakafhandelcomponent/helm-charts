@@ -1,4 +1,5 @@
 # Valtimo GZAC Helm charts
+![img.png](img.png)
 This repository contains the helm charts for the Valtimo GZAC application.
 
 Find the helm configuration values here:
