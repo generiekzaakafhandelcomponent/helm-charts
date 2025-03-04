@@ -1,6 +1,10 @@
 # Valtimo GZAC Helm charts
-![img.png](img.png)
 This repository contains the helm charts for the Valtimo GZAC application.
+
+We maintain three branches, `Release/1.x.x`, `Release/2.x.x` and `main` that are compatible with respectively Valtimo GZAC 10.x, 11.x and 12.x.
+Please pick the right chart version to ensure the proper configmap/envvars are setup in your cluster.
+
+![img.png](img.png)
 
 Find the helm configuration values here:
 
