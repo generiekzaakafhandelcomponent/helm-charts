@@ -78,9 +78,28 @@ ingress:
     - host: chart-example.local
       paths:
         # -- Ingress path
-        - path: /
+        - path: /api
           # --  Ingress path type
-          pathType: ImplementationSpecific
+          pathType: Prefix
+          backend:
+            service:
+              name:
+              port:
+                number:
+        - path: /v3
+          pathType: Prefix
+          backend:
+            service:
+              name:
+              port:
+                number:
+        - path: /camunda
+          pathType: Prefix
+          backend:
+            service:
+              name:
+              port:
+                number:
       # -- Setting a port name will overwrite the use of a port number. Setting the service name overwrites the default valtimo-backend.fullname
       # - path: /api
       #   pathType: Prefix

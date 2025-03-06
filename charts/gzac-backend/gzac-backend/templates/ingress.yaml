@@ -1,27 +1,18 @@
 {{- if .Values.ingress.enabled -}}
-
-  # Define the fullName variable
   {{- $fullName := include "gzac-backend.fullname" . -}}
-
-  # Extract Kubernetes major and minor versions and convert them to integers
-  {{- $kubeMajor := int .Capabilities.KubeVersion.Major }}
-  {{- $kubeMinor := int .Capabilities.KubeVersion.Minor }}
-  {{- $kubeVersion := .Capabilities.KubeVersion.Version }}
-
-  # Select appropriate API version based on Kubernetes version
-  {{- $apiVersion := "" }}
-  {{- if semverCompare ">=1.19-0" $kubeVersion }}
-  {{- $apiVersion = "networking.k8s.io/v1" }}
-  {{- else if semverCompare ">=1.14-0" $kubeVersion }}
-  {{- $apiVersion = "networking.k8s.io/v1beta1" }}
+  {{- $svcPort := .Values.service.port -}}
+  {{- if and .Values.ingress.ingressClassName (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
+  {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
+  {{- $_ := set .Values.ingress.annotations "kubernetes.io/ingress.class" .Values.ingress.ingressClassName}}
   {{- end }}
-
-  # Ensure API version is always set (Prevents "apiVersion not set" error)
-  {{- if not $apiVersion }}
-  {{- fail "Unsupported Kubernetes version: Ensure you are using Kubernetes 1.14 or later." }}
   {{- end }}
-
-apiVersion: {{ $apiVersion }}
+  {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+  {{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+  {{- else -}}
+apiVersion: extensions/v1beta1
+  {{- end }}
 kind: Ingress
 metadata:
   name: {{ $fullName }}
@@ -32,10 +23,9 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.ingress.ingressClassName }}
+  {{- if and .Values.ingress.ingressClassName (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
   ingressClassName: {{ .Values.ingress.ingressClassName }}
   {{- end }}
-
   {{- if .Values.ingress.tls }}
   tls:
     {{- range .Values.ingress.tls }}
@@ -46,7 +36,6 @@ spec:
       secretName: {{ .secretName }}
     {{- end }}
   {{- end }}
-
   rules:
     {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
@@ -54,16 +43,25 @@ spec:
         paths:
           {{- range .paths }}
           - path: {{ .path }}
-            pathType: {{ .pathType | default "Prefix" }}
+            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+            pathType: {{ .pathType }}
+            {{- end }}
             backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
                 name: {{ .backend.service.name | default $fullName }}
                 port:
                   {{- if and (hasKey .backend.service.port "name") (ne .backend.service.port.name "") }}
                   name: {{ .backend.service.port.name }}
                   {{- else }}
-                  number: {{ .backend.service.port.number | default 8080 }}
+                  number: {{ .backend.service.port.number | default $svcPort }}
                   {{- end }}
+              {{- else }}
+              serviceName: {{ $fullName }}
+              servicePort: {{ $svcPort }}
+              {{- end }}
           {{- end }}
     {{- end }}
   {{- end }}
+
+
