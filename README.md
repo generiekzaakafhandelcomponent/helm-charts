@@ -8,7 +8,7 @@ Please pick the right chart version to ensure the proper configmap/envvars are s
 
 Find the helm configuration values here:
 
-* [GZAC Backend](https://github.com/generiekzaakafhandelcomponent/helm-charts/blob/main/charts/gzac-backend/README.md)
-* [GZAC Frontend](https://github.com/generiekzaakafhandelcomponent/helm-charts/tree/main/charts/gzac-frontend)
+* [GZAC Backend](https://github.com/generiekzaakafhandelcomponent/helm-charts/blob/main/charts/gzac-backend/gzac-backend/README.md)
+* [GZAC Frontend](https://github.com/generiekzaakafhandelcomponent/helm-charts/tree/main/charts/gzac-frontend/gzac-frontend/README.md)
 
 The generated list of published helm releases can be found [here](https://generiekzaakafhandelcomponent.github.io/helm-charts/index.yaml).
