@@ -22,4 +22,3 @@ data:
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ .Values.settings.spring.security.oauth2.client.provider.keycloakapi.issuerUri | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKJWT_CLIENTID: {{ .Values.settings.spring.security.oauth2.client.registration.keycloakjwt.clientId | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTID: {{ .Values.settings.spring.security.oauth2.client.registration.keycloakapi.clientId | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTSECRET: {{ .Values.settings.spring.security.oauth2.client.registration.keycloakapi.clientSecret | quote }}
