@@ -17,6 +17,7 @@ spec:
     - type: Resource
       resource:
         name: cpu
+        target:
           type: Utilization
           averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
@@ -24,6 +25,7 @@ spec:
     - type: Resource
       resource:
         name: memory
+        target:
           type: Utilization
           averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
