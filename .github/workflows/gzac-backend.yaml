@@ -1,6 +1,7 @@
 name: Build and Publish GZAC Backend Helm Chart
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'charts/gzac-backend/**'
