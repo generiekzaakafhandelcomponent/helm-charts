@@ -1,6 +1,6 @@
 # gzac-backend
 
-![Version: 3.0.8](https://img.shields.io/badge/Version-3.0.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.2.0](https://img.shields.io/badge/AppVersion-12.2.0-informational?style=flat-square)
+![Version: 3.0.10](https://img.shields.io/badge/Version-3.0.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.2.0](https://img.shields.io/badge/AppVersion-12.2.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -55,7 +55,7 @@ A Helm chart for Kubernetes
 | persistence.storageClass | string | `""` |  |
 | podAnnotations | object | `{}` | Annotations for gzac-backend pods |
 | podLabels | object | `{}` | Labels for gzac-backend pods |
-| podSecurityContext.fsGroup | int | `2000` | Set gzac-backend's pod security fsGroup |
+| podSecurityContext.fsGroup | int | `1000` | Set gzac-backend's pod security fsGroup |
 | postgresql | object | `{"auth":{"existingSecret":"","postgresPassword":"","secretKeys":{"adminPasswordKey":"","replicationPasswordKey":"","userPasswordKey":""}}}` | Postgresql subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/postgresql?modal=values for all possible values |
 | readinessProbe.failureThreshold | int | `6` | Failure threshold for readinessProbe |
 | readinessProbe.initialDelaySeconds | int | `20` | Initial delay seconds for readinessProbe |
