@@ -44,7 +44,7 @@ podLabels: {}
 
 podSecurityContext: 
   # -- Set gzac-backend's pod security fsGroup
-  fsGroup: 2000
+  fsGroup: 1000
 
 securityContext: 
   capabilities:
