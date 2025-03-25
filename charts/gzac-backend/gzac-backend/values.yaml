@@ -203,14 +203,14 @@ persistence:
   annotations: {}
   # -- persistence.size Size of data volume
   size: 1Gi
-  # -- persistence.storageClass Storage class of backing PVC
-  # -- If defined, storageClassName: <storageClass>
+  # -- persistence.storageClassName Storage class of backing PVC
+  # -- If defined, storageClassName: <storageClassName>
   # -- If set to "-", storageClassName: "", which disables dynamic provisioning
   # -- If undefined (the default) or set to null, no storageClassName spec is
   # -- set, choosing the default provisioner.  (gp2 on AWS, standard on
   # -- GKE, AWS & OpenStack)
   # --
-  storageClass: ""
+  storageClassName: ""
   # -- persistence.existingClaim The name of an existing PVC to use for persistence
   existingClaim: null
   # -- persistence.mountPath Path to mount the volume at.
