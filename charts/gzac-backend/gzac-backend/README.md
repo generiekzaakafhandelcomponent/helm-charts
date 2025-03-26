@@ -52,7 +52,7 @@ A Helm chart for Kubernetes
 | persistence.existingClaim | string | `nil` | persistence.existingClaim The name of an existing PVC to use for persistence |
 | persistence.mountPath | string | `"/tmp"` | persistence.mountPath Path to mount the volume at. |
 | persistence.size | string | `"1Gi"` | persistence.size Size of data volume |
-| persistence.storageClass | string | `""` |  |
+| persistence.storageClassName | string | `""` |  |
 | podAnnotations | object | `{}` | Annotations for gzac-backend pods |
 | podLabels | object | `{}` | Labels for gzac-backend pods |
 | podSecurityContext.fsGroup | int | `1000` | Set gzac-backend's pod security fsGroup |
