@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "gzac-backend.fullname" . }}
+  name: {{ include "gzac-backend.fullname" . }}
   labels:
     {{- include "gzac-backend.labels" . | nindent 4 }}
 data:
@@ -9,16 +9,15 @@ data:
   SPRINGACTUATOR_USERNAME: {{ .Values.settings.spring.actuator.username | quote }}
   SPRING_DATASOURCE_URL: {{ .Values.settings.spring.datasource.url | quote }}
   SPRING_DATASOURCE_USERNAME: {{ .Values.settings.spring.datasource.username | quote }}
-  KEYCLOAK_AUTH_SERVER_URL: {{ .Values.settings.keycloak.authServerURL | quote }}
-  KEYCLOAK_RESOURCE: {{ .Values.settings.keycloak.clientID | quote }}
+  KEYCLOAK_AUTH_SERVER_URL: {{ required "You must set settings.keycloak.authServerURL" .Values.settings.keycloak.authServerURL | quote }}
+  KEYCLOAK_RESOURCE: {{ .Values.settings.keycloak.client | quote }}
   KEYCLOAK_REALM: {{ .Values.settings.keycloak.realm | quote }}
-  VALTIMO_KEYCLOAK_CLIENT: {{ .Values.settings.keycloak.client | quote }}
-  VALTIMO_OAUTH_PUBLIC_KEY: {{ .Values.settings.keycloak.publicKey | quote }}
+  VALTIMO_OAUTH_PUBLIC_KEY: {{ required "You must set settings.keycloak.publicKey" .Values.settings.keycloak.publicKey | quote }}
   VALTIMO_APP_HOSTNAME: {{ .Values.settings.gzac.appHostname | quote }}
   VALTIMO_DATABASE: {{ .Values.settings.gzac.databaseType | quote }}
   CAMUNDA_BPM_ADMINUSER_ID: {{ .Values.settings.camunda.adminUserID | quote }}
-  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: {{ .Values.settings.spring.security.oauth2.resourceserver.jwt.jwkSetUri | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKJWT_ISSUERURI: {{ .Values.settings.spring.security.oauth2.client.provider.keycloakjwt.issuerUri | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ .Values.settings.spring.security.oauth2.client.provider.keycloakapi.issuerUri | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKJWT_CLIENTID: {{ .Values.settings.spring.security.oauth2.client.registration.keycloakjwt.clientId | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTID: {{ .Values.settings.spring.security.oauth2.client.registration.keycloakapi.clientId | quote }}
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: {{ printf "%s/auth/realms/%s/protocol/openid-connect/certs" .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTID: {{ .Values.settings.keycloak.realmRoleId | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKJWT_ISSUERURI: {{ printf "%s/realms/%s" .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ printf "%s/realms/%s" .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote  }}
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKJWT_CLIENTID: {{ .Values.settings.keycloak.clientID | quote }}
