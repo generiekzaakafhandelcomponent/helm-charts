@@ -19,7 +19,7 @@ jobs:
           version: 3.9.0
       - name: Helm Lint
         run: |
-          cd charts/gzac-frontend/gzac-frontend
+          cd charts/gzac-backend/gzac-backend
           helm lint
 
   add-readme-if-missing:
