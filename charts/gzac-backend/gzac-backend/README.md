@@ -26,16 +26,15 @@ A Helm chart for Kubernetes
 | extraEnvVars | list | `[]` | Array with extra environment variables to add |
 | extraVolumeMounts | list | `[]` | Optionally specify extra list of additional volumeMounts |
 | extraVolumes | list | `[]` | Optionally specify extra list of additional volumes |
-| fullnameOverride | string | `""` | String to fully override valitmo-backend.fullname |
+| fullnameOverride | string | `""` | String to fully override gzac-backend.fullname |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy for the image |
 | image.repository | string | `"ritense/gzac-backend"` | Domain of the image repository |
 | image.tag | string | `"12.2.1"` | Overrides the image tag whose default is the chart appVersion. |
 | imagePullSecrets | list | `[]` | Image pull secrets |
 | ingress.annotations | object | `{}` | Ingress annotations |
 | ingress.enabled | bool | `false` | Expose the gzac-backend UI through an ingress |
-| ingress.hosts[0] | object | `{"host":"chart-example.local","paths":[{"backend":{"service":{"name":null,"port":{"number":null}}},"path":"/api","pathType":"Prefix"},{"backend":{"service":{"name":null,"port":{"number":null}}},"path":"/v3","pathType":"Prefix"},{"backend":{"service":{"name":null,"port":{"number":null}}},"path":"/camunda","pathType":"Prefix"}]}` | Ingress hostname |
-| ingress.hosts[0].paths[0] | object | `{"backend":{"service":{"name":null,"port":{"number":null}}},"path":"/api","pathType":"Prefix"}` | Ingress path |
-| ingress.hosts[0].paths[0].pathType | string | `"Prefix"` | Ingress path type |
+| ingress.hosts[0].host | string | `"chart-example.local"` | Ingress hostname |
+| ingress.hosts[0].paths | list | `[{"backend":{"service":{"name":null,"port":{"number":null}}},"path":"/api","pathType":"Prefix"},{"backend":{"service":{"name":null,"port":{"number":null}}},"path":"/v3","pathType":"Prefix"},{"backend":{"service":{"name":null,"port":{"number":null}}},"path":"/camunda","pathType":"Prefix"}]` | Ingress paths to route to the gzac backend. Recommended to keep these default values. |
 | ingress.ingressClassName | string | `""` | Ingress Class which will be used to implement the Ingress |
 | ingress.tls | list | `[]` | Enable TLS for the Ingress |
 | keycloak | object | `{"auth":{"adminPassword":"","adminUser":"user","existingSecret":""}}` | Keycloak subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/keycloak?modal=values for all possible values |
@@ -45,7 +44,7 @@ A Helm chart for Kubernetes
 | livenessProbe.successThreshold | int | `1` | Success threshold for livenessProbe |
 | livenessProbe.timeoutSeconds | int | `1` | Timeout seconds for livenessProbe |
 | mysql | object | `{"auth":{"existingSecret":"","rootPassword":""}}` | MySQL subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/mysql?modal=values for all possible values |
-| nameOverride | string | `""` | Name override for gzac-Backend |
+| nameOverride | string | `""` | Name override for gzac-backend |
 | nodeSelector | object | `{}` | Node labels for gzac-backend pods assignment |
 | persistence.annotations | object | `{}` |  |
 | persistence.enabled | bool | `false` | Enable/disable persistent volumes for Gzac-backend |
@@ -74,24 +73,23 @@ A Helm chart for Kubernetes
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | If not set and create is true, a name is generated using the fullname template |
 | settings.camunda.adminUserID | string | `"admin"` | Default Camunda admin user |
-| settings.camunda.adminUserPassword | string | `""` | Default Camunda admin password |
+| settings.camunda.adminUserPassword | string | `""` | Default Camunda admin password.  Or, if using existingSecret: `CAMUNDA_BPM_ADMINUSER_PASSWORD` |
 | settings.gzac.appHostName | string | `nil` | The hostname which exposes gzac-backend |
-| settings.gzac.connectorEncryptionSecret | string | `""` | Encryption secret |
+| settings.gzac.connectorEncryptionSecret | string | `""` | Encryption secret Or, if using existingSecret: `VALTIMO_CONNECTORENCRYPTION_SECRET` |
 | settings.gzac.databaseType | string | `"postgres"` | Type of database to use (can by either 'postgres' or 'mysql') |
 | settings.gzac.serverPort | int | `8080` | The port on which gzac-backend is listening |
 | settings.keycloak.authServerURL | string | `nil` | URL of Keycloak - Required |
 | settings.keycloak.clientID | string | `"valtimo-user-m2m-client"` | Client-ID to connect with Keycloak |
-| settings.keycloak.clientSecret | string | `""` | Client-Secret to connect with Keycloak. Or, if using existingSecret: KEYCLOAK_CREDENTIALS_SECRET and SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTSECRET (must set both) |
+| settings.keycloak.clientSecret | string | `""` | Client-Secret to connect with Keycloak. Or, if using existingSecret: `KEYCLOAK_CREDENTIALS_SECRET` and `SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTSECRET` (must set both) |
 | settings.keycloak.publicKey | string | `""` | Keycloak's Public Key used to verify signature of JWTs - Required. In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'.  Use the public key with Use: 'SIG' and Provider: 'rsa-generated'. |
 | settings.keycloak.realm | string | `nil` | Keycloak realm - Required |
 | settings.keycloak.realmRoleId | string | `"valtimo-console"` | Client-ID for using Valtimo with Keycloak realm roles. More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles |
-| settings.spring.actuator.password | string | `""` | Password to access the Spring actuator endpoint |
+| settings.spring.actuator.password | string | `""` | Password to access the Spring actuator endpoint. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
 | settings.spring.actuator.username | string | `"admin"` | Username to access the Spring actuator endpoint |
-| settings.spring.datasource.password | string | `""` | Password for the database |
+| settings.spring.datasource.password | string | `""` | Password for the database Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
 | settings.spring.datasource.url | string | `nil` | URL for the database |
 | settings.spring.datasource.username | string | `nil` | Username for the database |
 | settings.spring.profiles.active | string | `"cloud"` | Activated Spring profiles |
-| settings.spring.security | object | `{"oauth2":{"client":{"provider":{"keycloakapi":{"issuerUri":null},"keycloakjwt":{"issuerUri":null}},"registration":{"keycloakapi":{"clientId":null,"clientSecret":null},"keycloakjwt":{"clientId":null}}},"resourceserver":{"jwt":{"jwkSetUri":null}}}}` | oauth2 for keycloak. Use either this or the keycloak config |
 | tags.keycloak | bool | `true` | Deploy a Keycloak instance |
 | tags.mysql | bool | `false` | Deploy a MySQL instance |
 | tags.postgresql | bool | `true` | Deploy a PostgreSQL instance |
