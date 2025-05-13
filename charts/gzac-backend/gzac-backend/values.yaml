@@ -256,7 +256,7 @@ settings:
   keycloak: 
     # -- URL of Keycloak - Required
     authServerURL: 
-    # -- Required: Keycloak realm - Required
+    # -- Keycloak realm - Required
     realm:
     # -- Client-ID to connect with Keycloak
     clientID: valtimo-user-m2m-client
