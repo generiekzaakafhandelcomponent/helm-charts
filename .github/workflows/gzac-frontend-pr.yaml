@@ -1,4 +1,4 @@
-name: Generate and push README to PR source branch
+name: Frontend - run Helm lint, generate and push README to PR source branch
 
 on:
   workflow_dispatch:
