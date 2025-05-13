@@ -1,6 +1,6 @@
 # gzac-backend
 
-![Version: 3.0.10](https://img.shields.io/badge/Version-3.0.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.2.0](https://img.shields.io/badge/AppVersion-12.2.0-informational?style=flat-square)
+![Version: 3.0.11](https://img.shields.io/badge/Version-3.0.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.2.0](https://img.shields.io/badge/AppVersion-12.2.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -85,6 +85,7 @@ A Helm chart for Kubernetes
 | settings.keycloak.clientSecret | string | `""` | Client-Secret to connect with Keycloak |
 | settings.keycloak.publicKey | string | `nil` | Keycloak's Public Key used to verify signature of JWTs |
 | settings.keycloak.realm | string | `nil` | Keycloak realm |
+| settings.new_value | string | `nil` | No commits should be done |
 | settings.spring.actuator.password | string | `""` | Password to access the Spring actuator endpoint |
 | settings.spring.actuator.username | string | `"admin"` | Username to access the Spring actuator endpoint |
 | settings.spring.datasource.password | string | `""` | Password for the database |

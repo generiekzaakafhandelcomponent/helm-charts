@@ -252,7 +252,9 @@ settings:
             keycloakapi:
               clientId:
               clientSecret:
-    
+  # -- No commits should be done
+  new_value: 
+
   keycloak: 
     # -- URL of Keycloak
     authServerURL: 
