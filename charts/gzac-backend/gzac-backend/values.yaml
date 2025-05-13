@@ -224,7 +224,7 @@ settings:
       url: 
       # -- Username for the database
       username: 
-      # -- Password for the database
+      # -- Password for the database.
       # Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD`
       password: ""
     
