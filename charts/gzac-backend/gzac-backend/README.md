@@ -86,7 +86,7 @@ A Helm chart for Kubernetes
 | settings.keycloak.realmRoleId | string | `"valtimo-console"` | Client-ID for using Valtimo with Keycloak realm roles. More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles |
 | settings.spring.actuator.password | string | `""` | Password to access the Spring actuator endpoint. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
 | settings.spring.actuator.username | string | `"admin"` | Username to access the Spring actuator endpoint |
-| settings.spring.datasource.password | string | `""` | Password for the database Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
+| settings.spring.datasource.password | string | `""` | Password for the database. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
 | settings.spring.datasource.url | string | `nil` | URL for the database |
 | settings.spring.datasource.username | string | `nil` | Username for the database |
 | settings.spring.profiles.active | string | `"cloud"` | Activated Spring profiles |
