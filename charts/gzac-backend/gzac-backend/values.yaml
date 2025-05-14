@@ -22,9 +22,9 @@ image:
 
 # -- Image pull secrets
 imagePullSecrets: []
-# -- Name override for gzac-Backend
+# -- Name override for gzac-backend
 nameOverride: ""
-# -- String to fully override valitmo-backend.fullname
+# -- String to fully override gzac-backend.fullname
 fullnameOverride: ""
 
 serviceAccount:
@@ -74,12 +74,11 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    # -- Ingress hostname
-    - host: chart-example.local
+    - # -- Ingress hostname
+      host: chart-example.local
+      # -- Ingress paths to route to the gzac backend. Recommended to keep these default values.
       paths:
-        # -- Ingress path
         - path: /api
-          # --  Ingress path type
           pathType: Prefix
           backend:
             service:
@@ -100,14 +99,6 @@ ingress:
               name:
               port:
                 number:
-      # -- Setting a port name will overwrite the use of a port number. Setting the service name overwrites the default valtimo-backend.fullname
-      # - path: /api
-      #   pathType: Prefix
-      #   backend:
-      #     service:
-      #       name: valtimo-backend
-      #       port:
-      #         name: use-annotation
   # -- Enable TLS for the Ingress
   tls: []
   #  - secretName: chart-example-tls
@@ -225,47 +216,37 @@ settings:
     actuator: 
       # -- Username to access the Spring actuator endpoint
       username: "admin"
-      # -- Password to access the Spring actuator endpoint
+      # -- Password to access the Spring actuator endpoint.
+      # Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD`
       password: ""
     datasource: 
       # -- URL for the database
       url: 
       # -- Username for the database
       username: 
-      # -- Password for the database
+      # -- Password for the database.
+      # Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD`
       password: ""
-    # -- oauth2 for keycloak. Use either this or the keycloak config
-    security:
-      oauth2:
-        resourceserver:
-          jwt:
-            jwkSetUri:
-        client:
-          provider:
-            keycloakjwt:
-              issuerUri:
-            keycloakapi:
-              issuerUri:
-          registration:
-            keycloakjwt:
-              clientId:
-            keycloakapi:
-              clientId:
-              clientSecret:
     
   keycloak: 
-    # -- URL of Keycloak
+    # -- URL of Keycloak - Required
     authServerURL: 
-    # -- Keycloak realm
-    realm: 
+    # -- Keycloak realm - Required
+    realm:
     # -- Client-ID to connect with Keycloak
-    clientID: 
-    # -- Client-Secret to connect with Keycloak
+    clientID: valtimo-user-m2m-client
+    # -- Client-ID for using Valtimo with Keycloak realm roles.
+    # More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles
+    realmRoleId: valtimo-console
+
+    # -- Client-Secret to connect with Keycloak.
+    # Or, if using existingSecret: `KEYCLOAK_CREDENTIALS_SECRET` and `SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTSECRET` (must set both)
     clientSecret: ""
-    # -- Keycloak's Public Key used to verify signature of JWTs
-    publicKey:
-    # -- Keycloak client - used to retrieve client roles
-    client:
+
+    # -- Keycloak's Public Key used to verify signature of JWTs - Required.
+    # In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'. 
+    # Use the public key with Use: 'SIG' and Provider: 'rsa-generated'.
+    publicKey: ""
 
   gzac:
     # -- Type of database to use (can by either 'postgres' or 'mysql')
@@ -275,12 +256,14 @@ settings:
     # -- The port on which gzac-backend is listening
     serverPort: 8080
     # -- Encryption secret
+    # Or, if using existingSecret: `VALTIMO_CONNECTORENCRYPTION_SECRET`
     connectorEncryptionSecret: ""
 
   camunda: 
     # -- Default Camunda admin user
     adminUserID: "admin"
-    # -- Default Camunda admin password
+    # -- Default Camunda admin password. 
+    # Or, if using existingSecret: `CAMUNDA_BPM_ADMINUSER_PASSWORD`
     adminUserPassword: ""
 
 ##########################################################################
