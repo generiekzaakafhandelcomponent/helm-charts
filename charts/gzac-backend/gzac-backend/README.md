@@ -84,6 +84,7 @@ A Helm chart for Kubernetes
 | settings.keycloak.publicKey | string | `""` | Keycloak's Public Key used to verify signature of JWTs - Required. In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'.  Use the public key with Use: 'SIG' and Provider: 'rsa-generated'. |
 | settings.keycloak.realm | string | `nil` | Keycloak realm - Required |
 | settings.keycloak.realmRoleId | string | `"valtimo-console"` | Client-ID for using Valtimo with Keycloak realm roles. More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles |
+| settings.keycloak.version | string | `""` | Keycloak version you are running against - Required |
 | settings.spring.actuator.password | string | `""` | Password to access the Spring actuator endpoint. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
 | settings.spring.actuator.username | string | `"admin"` | Username to access the Spring actuator endpoint |
 | settings.spring.datasource.password | string | `""` | Password for the database. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
