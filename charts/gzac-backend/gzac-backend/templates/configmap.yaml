@@ -1,6 +1,6 @@
 {{- $keycloak_version := required "You must set settings.keycloak.version" .Values.settings.keycloak.version -}}
 {{- $jwks_uri_prefix := "" -}}
-{{- if not (semverCompare ">=17.0.0" (default "0" $keycloak_version)) -}}
+{{- if (semverCompare "<17.0.0" (default "0" $keycloak_version)) -}}
 {{- $jwks_uri_prefix = "/auth" -}}
 {{- end -}}
 ---
