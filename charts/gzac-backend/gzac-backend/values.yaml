@@ -248,6 +248,9 @@ settings:
     # Use the public key with Use: 'SIG' and Provider: 'rsa-generated'.
     publicKey: ""
 
+    # -- Keycloak version you are running against - Required
+    version: ""
+
   gzac:
     # -- Type of database to use (can by either 'postgres' or 'mysql')
     databaseType: "postgres"
