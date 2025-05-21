@@ -59,6 +59,8 @@ securityContext:
   runAsUser: 1000
 
 service:
+  # -- gzac-backend enable management interface
+  management: false
   # -- gzac-backend service type
   type: ClusterIP
   # -- gzac-backend service port

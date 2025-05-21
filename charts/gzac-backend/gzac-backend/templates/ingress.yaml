@@ -1,6 +1,7 @@
 {{- if .Values.ingress.enabled -}}
   {{- $fullName := include "gzac-backend.fullname" . -}}
   {{- $svcPort := .Values.service.port -}}
+  {{- $management := .Values.service.management -}}
   {{- if and .Values.ingress.ingressClassName (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
   {{- $_ := set .Values.ingress.annotations "kubernetes.io/ingress.class" .Values.ingress.ingressClassName}}
@@ -58,6 +59,22 @@ spec:
                   {{- end }}
               {{- else }}
               serviceName: {{ $fullName }}
+              servicePort: {{ $svcPort }}
+              {{- end }}
+          {{- end }}
+          {{- if $management }}
+          - path: "/management/(.*)"
+            {{- if semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion }}
+            pathType: ImplementationSpecific
+            {{- end }}
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ printf "%s-management" ($fullName) }}
+                port:
+                  number: {{ $svcPort }}
+              {{- else }}
+              serviceName: {{ printf "%s-management" ($fullName) }}
               servicePort: {{ $svcPort }}
               {{- end }}
           {{- end }}

@@ -13,3 +13,21 @@ spec:
       name: http
   selector:
     {{- include "gzac-backend.selectorLabels" . | nindent 4 }}
+---
+{{- if .Values.service.management }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gzac-backend.fullname" . }}-management
+  labels:
+    {{- include "gzac-backend.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: management
+      protocol: TCP
+      name: management
+  selector:
+    {{- include "gzac-backend.selectorLabels" . | nindent 4 }}
+{{- end }}
