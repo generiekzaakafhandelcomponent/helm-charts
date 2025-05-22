@@ -106,8 +106,12 @@ ingress:
   #      - chart-example.local
 
 livenessProbe:
+  httpGet:
+    path: /readyz # TODO
+    port: http
+  exec:
   # -- Initial delay seconds for livenessProbe
-  initialDelaySeconds: 40
+  initialDelaySeconds: 300
   # -- Period seconds for livenessProbe
   periodSeconds: 10
   # -- Timeout seconds for livenessProbe
@@ -118,8 +122,12 @@ livenessProbe:
   successThreshold: 1
 
 readinessProbe:
+  httpGet:
+    path: /readyz # TODO
+    port: http
+  exec:
   # -- Initial delay seconds for readinessProbe
-  initialDelaySeconds: 20
+  initialDelaySeconds: 300
   # -- Period seconds for readinessProbe
   periodSeconds: 10
   # -- Timeout seconds for readinessProbe
@@ -235,9 +243,10 @@ settings:
     realm:
     # -- Client-ID to connect with Keycloak
     clientID: valtimo-user-m2m-client
-    # -- Client-ID for using Valtimo with Keycloak realm roles.
+
+    # -- Client-ID for using Valtimo with Keycloak client roles. Optional, but without it, you can only use Keycloak realm roles.
     # More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles
-    realmRoleId: valtimo-console
+    clientRoleId: valtimo-console
 
     # -- Client-Secret to connect with Keycloak.
     # Or, if using existingSecret: `KEYCLOAK_CREDENTIALS_SECRET` and `SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTSECRET` (must set both)
