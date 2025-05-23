@@ -22,7 +22,7 @@ data:
   VALTIMO_DATABASE: {{ .Values.settings.gzac.databaseType | quote }}
   CAMUNDA_BPM_ADMINUSER_ID: {{ .Values.settings.camunda.adminUserID | quote }}
   SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: {{ printf "%s%s/realms/%s/protocol/openid-connect/certs" $jwks_uri_prefix .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKJWT_CLIENTID: {{ .Values.settings.keycloak.realmRoleId | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKJWT_CLIENTID: {{ .Values.settings.keycloak.clientRoleID | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKJWT_ISSUERURI: {{ printf "%s/realms/%s" .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ printf "%s/realms/%s" .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote  }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTID: {{ .Values.settings.keycloak.clientID | quote }}
