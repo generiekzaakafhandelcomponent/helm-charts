@@ -235,7 +235,7 @@ settings:
     realm:
     # -- Client-ID to connect with Keycloak
     clientID: valtimo-user-m2m-client
-    # -- Client-ID for using Valtimo with Keycloak realm roles.
+    # -- Client-ID for using Valtimo with Keycloak client roles.
     # More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles
     clientRoleID: valtimo-console
 
