@@ -1,6 +1,6 @@
 # gzac-backend
 
-![Version: 3.3.0](https://img.shields.io/badge/Version-3.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.12.0](https://img.shields.io/badge/AppVersion-12.12.0-informational?style=flat-square)
+![Version: 3.3.1](https://img.shields.io/badge/Version-3.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.12.0](https://img.shields.io/badge/AppVersion-12.12.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -38,11 +38,11 @@ A Helm chart for Kubernetes
 | ingress.ingressClassName | string | `""` | Ingress Class which will be used to implement the Ingress |
 | ingress.tls | list | `[]` | Enable TLS for the Ingress |
 | keycloak | object | `{"auth":{"adminPassword":"","adminUser":"user","existingSecret":""}}` | Keycloak subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/keycloak?modal=values for all possible values |
-| livenessProbe.failureThreshold | int | `6` | Failure threshold for livenessProbe |
-| livenessProbe.initialDelaySeconds | int | `40` | Initial delay seconds for livenessProbe |
-| livenessProbe.periodSeconds | int | `10` | Period seconds for livenessProbe |
-| livenessProbe.successThreshold | int | `1` | Success threshold for livenessProbe |
-| livenessProbe.timeoutSeconds | int | `1` | Timeout seconds for livenessProbe |
+| livenessProbe.failureThreshold | int | `3` | Failure threshold for livenessProbe |
+| livenessProbe.httpGet.path | string | `"/api/v1/ping"` |  |
+| livenessProbe.httpGet.port | int | `8081` |  |
+| livenessProbe.initialDelaySeconds | int | `10` | Initial delay seconds for livenessProbe |
+| livenessProbe.periodSeconds | int | `40` | Period seconds for livenessProbe |
 | mysql | object | `{"auth":{"existingSecret":"","rootPassword":""}}` | MySQL subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/mysql?modal=values for all possible values |
 | nameOverride | string | `""` | Name override for gzac-backend |
 | nodeSelector | object | `{}` | Node labels for gzac-backend pods assignment |
@@ -56,11 +56,11 @@ A Helm chart for Kubernetes
 | podLabels | object | `{}` | Labels for gzac-backend pods |
 | podSecurityContext.fsGroup | int | `1000` | Set gzac-backend's pod security fsGroup |
 | postgresql | object | `{"auth":{"existingSecret":"","postgresPassword":"","secretKeys":{"adminPasswordKey":"","replicationPasswordKey":"","userPasswordKey":""}}}` | Postgresql subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/postgresql?modal=values for all possible values |
-| readinessProbe.failureThreshold | int | `6` | Failure threshold for readinessProbe |
-| readinessProbe.initialDelaySeconds | int | `20` | Initial delay seconds for readinessProbe |
-| readinessProbe.periodSeconds | int | `10` | Period seconds for readinessProbe |
-| readinessProbe.successThreshold | int | `1` | Success threshold for readinessProbe |
-| readinessProbe.timeoutSeconds | int | `1` | Timeout seconds for readinessProbe |
+| readinessProbe.failureThreshold | int | `3` | Failure threshold for readinessProbe |
+| readinessProbe.httpGet.path | string | `"/api/v1/ping"` |  |
+| readinessProbe.httpGet.port | int | `8081` |  |
+| readinessProbe.initialDelaySeconds | int | `10` | Initial delay seconds for readinessProbe |
+| readinessProbe.periodSeconds | int | `20` | Period seconds for readinessProbe |
 | replicaCount | int | `1` | Amount of replicas running the gzac-backend |
 | resources | object | `{}` | Resources for gzac-backend |
 | securityContext.capabilities.drop | list | `["ALL"]` | gzac-backend's container security context capabilities to be dropped |
@@ -91,6 +91,9 @@ A Helm chart for Kubernetes
 | settings.spring.datasource.url | string | `nil` | URL for the database |
 | settings.spring.datasource.username | string | `nil` | Username for the database |
 | settings.spring.profiles.active | string | `"cloud"` | Activated Spring profiles |
+| startupProbe.failureThreshold | int | `90` |  |
+| startupProbe.httpGet | object | `{"path":"/api/v1/ping","port":8081}` | Startup probe endpoint and parameters If app does not start after 15 minutes, fail the startup probe |
+| startupProbe.periodSeconds | int | `10` |  |
 | tags.keycloak | bool | `true` | Deploy a Keycloak instance |
 | tags.mysql | bool | `false` | Deploy a MySQL instance |
 | tags.postgresql | bool | `true` | Deploy a PostgreSQL instance |
