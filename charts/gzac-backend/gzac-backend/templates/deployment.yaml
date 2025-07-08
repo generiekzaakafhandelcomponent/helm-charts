@@ -59,27 +59,22 @@ spec:
             - name: management
               containerPort: 8081
               protocol: TCP
+
+          {{- with .Values.startupProbe }}
           startupProbe:
-            httpGet:
-              path: /api/v1/ping
-              port: 8081
-            # If app does not start after 15 minutes, fail the startup probe
-            failureThreshold: 90
-            periodSeconds: 10
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with .Values.livenessProbe }}
           livenessProbe:
-            httpGet:
-              path: /api/v1/ping
-              port: 8081
-            initialDelaySeconds: 10
-            periodSeconds: 40
-            failureThreshold: 3
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          {{- with .Values.readinessProbe }}
           readinessProbe:
-            httpGet:
-              path: /api/v1/ping
-              port: 8081
-            initialDelaySeconds: 10
-            periodSeconds: 20
-            failureThreshold: 3
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
