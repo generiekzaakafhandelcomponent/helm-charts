@@ -27,3 +27,4 @@ data:
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTID: {{ .Values.settings.keycloak.clientID | quote }}
   VALTIMO_KEYCLOAK_CLIENT: {{ .Values.settings.keycloak.clientID | quote }}
   KEYCLOAK_RESOURCE: {{ .Values.settings.keycloak.clientID | quote }}
+  VALTIMO_APP_HOSTNAME: {{ .Values.settings.gzac.appHostName | quote }}
