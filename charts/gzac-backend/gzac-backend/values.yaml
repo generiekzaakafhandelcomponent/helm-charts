@@ -110,13 +110,13 @@ startupProbe:
   # If app does not start after 15 minutes, fail the startup probe
   httpGet:
     path: /api/v1/ping
-    port: 8081
+    port: 8080
   failureThreshold: 90
   periodSeconds: 10
 livenessProbe:
   httpGet:
     path: /api/v1/ping
-    port: 8081
+    port: 8080
   # -- Initial delay seconds for livenessProbe
   initialDelaySeconds: 10
   # -- Period seconds for livenessProbe
@@ -126,7 +126,7 @@ livenessProbe:
 readinessProbe:
   httpGet:
     path: /api/v1/ping
-    port: 8081
+    port: 8080
   # -- Initial delay seconds for readinessProbe
   initialDelaySeconds: 10
   # -- Period seconds for readinessProbe
