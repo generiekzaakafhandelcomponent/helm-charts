@@ -40,7 +40,7 @@ A Helm chart for Kubernetes
 | keycloak | object | `{"auth":{"adminPassword":"","adminUser":"user","existingSecret":""}}` | Keycloak subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/keycloak?modal=values for all possible values |
 | livenessProbe.failureThreshold | int | `3` | Failure threshold for livenessProbe |
 | livenessProbe.httpGet.path | string | `"/api/v1/ping"` |  |
-| livenessProbe.httpGet.port | int | `8081` |  |
+| livenessProbe.httpGet.port | int | `8080` |  |
 | livenessProbe.initialDelaySeconds | int | `10` | Initial delay seconds for livenessProbe |
 | livenessProbe.periodSeconds | int | `40` | Period seconds for livenessProbe |
 | mysql | object | `{"auth":{"existingSecret":"","rootPassword":""}}` | MySQL subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/mysql?modal=values for all possible values |
@@ -58,7 +58,7 @@ A Helm chart for Kubernetes
 | postgresql | object | `{"auth":{"existingSecret":"","postgresPassword":"","secretKeys":{"adminPasswordKey":"","replicationPasswordKey":"","userPasswordKey":""}}}` | Postgresql subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/postgresql?modal=values for all possible values |
 | readinessProbe.failureThreshold | int | `3` | Failure threshold for readinessProbe |
 | readinessProbe.httpGet.path | string | `"/api/v1/ping"` |  |
-| readinessProbe.httpGet.port | int | `8081` |  |
+| readinessProbe.httpGet.port | int | `8080` |  |
 | readinessProbe.initialDelaySeconds | int | `10` | Initial delay seconds for readinessProbe |
 | readinessProbe.periodSeconds | int | `20` | Period seconds for readinessProbe |
 | replicaCount | int | `1` | Amount of replicas running the gzac-backend |
@@ -92,7 +92,7 @@ A Helm chart for Kubernetes
 | settings.spring.datasource.username | string | `nil` | Username for the database |
 | settings.spring.profiles.active | string | `"cloud"` | Activated Spring profiles |
 | startupProbe.failureThreshold | int | `90` |  |
-| startupProbe.httpGet | object | `{"path":"/api/v1/ping","port":8081}` | Startup probe endpoint and parameters If app does not start after 15 minutes, fail the startup probe |
+| startupProbe.httpGet | object | `{"path":"/api/v1/ping","port":8080}` | Startup probe endpoint and parameters If app does not start after 15 minutes, fail the startup probe |
 | startupProbe.periodSeconds | int | `10` |  |
 | tags.keycloak | bool | `true` | Deploy a Keycloak instance |
 | tags.mysql | bool | `false` | Deploy a MySQL instance |
