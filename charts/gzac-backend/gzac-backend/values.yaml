@@ -242,6 +242,7 @@ settings:
     clientID: valtimo-user-m2m-client
     # -- Client-ID for using Valtimo with Keycloak client roles.
     # More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles
+    # Set to `null` to disable client roles entirely and use realm roles instead.
     clientRoleID: valtimo-console
 
     # -- Client-Secret to connect with Keycloak.
