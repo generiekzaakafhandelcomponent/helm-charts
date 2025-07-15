@@ -80,7 +80,7 @@ A Helm chart for Kubernetes
 | settings.gzac.serverPort | int | `8080` | The port on which gzac-backend is listening |
 | settings.keycloak.authServerURL | string | `nil` | URL of Keycloak - Required |
 | settings.keycloak.clientID | string | `"valtimo-user-m2m-client"` | Client-ID to connect with Keycloak |
-| settings.keycloak.clientRoleID | string | `"valtimo-console"` | Client-ID for using Valtimo with Keycloak client roles. More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles |
+| settings.keycloak.clientRoleID | string | `"valtimo-console"` | Client-ID for using Valtimo with Keycloak client roles. More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles Set to `null` to disable client roles entirely and use realm roles instead. |
 | settings.keycloak.clientSecret | string | `""` | Client-Secret to connect with Keycloak. Or, if using existingSecret: `KEYCLOAK_CREDENTIALS_SECRET` and `SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTSECRET` (must set both) |
 | settings.keycloak.publicKey | string | `""` | Keycloak's Public Key used to verify signature of JWTs - Required. In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'.  Use the public key with Use: 'SIG' and Provider: 'rsa-generated'. |
 | settings.keycloak.realm | string | `nil` | Keycloak realm - Required |
