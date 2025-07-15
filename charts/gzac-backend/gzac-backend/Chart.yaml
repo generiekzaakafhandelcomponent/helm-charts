@@ -3,7 +3,7 @@ appVersion: 12.12.0
 description: A Helm chart for Kubernetes
 name: gzac-backend
 type: application
-version: 3.3.1
+version: 3.4.0
 
 dependencies:
   - name: postgresql
