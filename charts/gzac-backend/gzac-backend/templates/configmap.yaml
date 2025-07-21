@@ -20,10 +20,10 @@ data:
   VALTIMO_OAUTH_PUBLIC_KEY: {{ required "You must set settings.keycloak.publicKey" .Values.settings.keycloak.publicKey | quote }}
   VALTIMO_DATABASE: {{ .Values.settings.gzac.databaseType | quote }}
   CAMUNDA_BPM_ADMINUSER_ID: {{ .Values.settings.camunda.adminUserID | quote }}
-  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: {{ printf "%s%s/realms/%s/protocol/openid-connect/certs" $jwks_uri_prefix .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote }}
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: {{ printf "%s%s/realms/%s/protocol/openid-connect/certs" .Values.settings.keycloak.authServerURL $jwks_uri_prefix .Values.settings.keycloak.realm | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKJWT_CLIENTID: {{ .Values.settings.keycloak.clientRoleID | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKJWT_ISSUERURI: {{ printf "%s/realms/%s" .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ printf "%s/realms/%s" .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote  }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKJWT_ISSUERURI: {{ printf "%s%s/realms/%s" .Values.settings.keycloak.authServerURL $jwks_uri_prefix .Values.settings.keycloak.realm | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ printf "%s%s/realms/%s" .Values.settings.keycloak.authServerURL $jwks_uri_prefix .Values.settings.keycloak.realm | quote  }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTID: {{ .Values.settings.keycloak.clientID | quote }}
   VALTIMO_KEYCLOAK_CLIENT: {{ .Values.settings.keycloak.clientID | quote }}
   KEYCLOAK_RESOURCE: {{ .Values.settings.keycloak.clientID | quote }}
