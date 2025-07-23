@@ -27,3 +27,6 @@ data:
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKJWT_ISSUERURI: {{ printf "%s/realms/%s" .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ printf "%s/realms/%s" .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote  }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTID: {{ .Values.settings.keycloak.clientID | quote }}
+  VALTIMO_KEYCLOAK_CLIENT: {{ .Values.settings.keycloak.clientID | quote }}
+  KEYCLOAK_RESOURCE: {{ .Values.settings.keycloak.clientID | quote }}
+  VALTIMO_APP_HOSTNAME: {{ .Values.settings.gzac.appHostName | quote }}

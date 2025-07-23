@@ -1,6 +1,6 @@
 # gzac-backend
 
-![Version: 3.3.0](https://img.shields.io/badge/Version-3.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.12.0](https://img.shields.io/badge/AppVersion-12.12.0-informational?style=flat-square)
+![Version: 3.4.0](https://img.shields.io/badge/Version-3.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.12.0](https://img.shields.io/badge/AppVersion-12.12.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -38,11 +38,11 @@ A Helm chart for Kubernetes
 | ingress.ingressClassName | string | `""` | Ingress Class which will be used to implement the Ingress |
 | ingress.tls | list | `[]` | Enable TLS for the Ingress |
 | keycloak | object | `{"auth":{"adminPassword":"","adminUser":"user","existingSecret":""}}` | Keycloak subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/keycloak?modal=values for all possible values |
-| livenessProbe.failureThreshold | int | `6` | Failure threshold for livenessProbe |
-| livenessProbe.initialDelaySeconds | int | `40` | Initial delay seconds for livenessProbe |
-| livenessProbe.periodSeconds | int | `10` | Period seconds for livenessProbe |
-| livenessProbe.successThreshold | int | `1` | Success threshold for livenessProbe |
-| livenessProbe.timeoutSeconds | int | `1` | Timeout seconds for livenessProbe |
+| livenessProbe.failureThreshold | int | `3` | Failure threshold for livenessProbe |
+| livenessProbe.httpGet.path | string | `"/api/v1/ping"` |  |
+| livenessProbe.httpGet.port | int | `8080` |  |
+| livenessProbe.initialDelaySeconds | int | `10` | Initial delay seconds for livenessProbe |
+| livenessProbe.periodSeconds | int | `40` | Period seconds for livenessProbe |
 | mysql | object | `{"auth":{"existingSecret":"","rootPassword":""}}` | MySQL subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/mysql?modal=values for all possible values |
 | nameOverride | string | `""` | Name override for gzac-backend |
 | nodeSelector | object | `{}` | Node labels for gzac-backend pods assignment |
@@ -56,11 +56,11 @@ A Helm chart for Kubernetes
 | podLabels | object | `{}` | Labels for gzac-backend pods |
 | podSecurityContext.fsGroup | int | `1000` | Set gzac-backend's pod security fsGroup |
 | postgresql | object | `{"auth":{"existingSecret":"","postgresPassword":"","secretKeys":{"adminPasswordKey":"","replicationPasswordKey":"","userPasswordKey":""}}}` | Postgresql subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/postgresql?modal=values for all possible values |
-| readinessProbe.failureThreshold | int | `6` | Failure threshold for readinessProbe |
-| readinessProbe.initialDelaySeconds | int | `20` | Initial delay seconds for readinessProbe |
-| readinessProbe.periodSeconds | int | `10` | Period seconds for readinessProbe |
-| readinessProbe.successThreshold | int | `1` | Success threshold for readinessProbe |
-| readinessProbe.timeoutSeconds | int | `1` | Timeout seconds for readinessProbe |
+| readinessProbe.failureThreshold | int | `3` | Failure threshold for readinessProbe |
+| readinessProbe.httpGet.path | string | `"/api/v1/ping"` |  |
+| readinessProbe.httpGet.port | int | `8080` |  |
+| readinessProbe.initialDelaySeconds | int | `10` | Initial delay seconds for readinessProbe |
+| readinessProbe.periodSeconds | int | `20` | Period seconds for readinessProbe |
 | replicaCount | int | `1` | Amount of replicas running the gzac-backend |
 | resources | object | `{}` | Resources for gzac-backend |
 | securityContext.capabilities.drop | list | `["ALL"]` | gzac-backend's container security context capabilities to be dropped |
@@ -80,7 +80,7 @@ A Helm chart for Kubernetes
 | settings.gzac.serverPort | int | `8080` | The port on which gzac-backend is listening |
 | settings.keycloak.authServerURL | string | `nil` | URL of Keycloak - Required |
 | settings.keycloak.clientID | string | `"valtimo-user-m2m-client"` | Client-ID to connect with Keycloak |
-| settings.keycloak.clientRoleID | string | `"valtimo-console"` | Client-ID for using Valtimo with Keycloak client roles. More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles |
+| settings.keycloak.clientRoleID | string | `"valtimo-console"` | Client-ID for using Valtimo with Keycloak client roles. More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles Set to `null` to disable client roles entirely and use realm roles instead. |
 | settings.keycloak.clientSecret | string | `""` | Client-Secret to connect with Keycloak. Or, if using existingSecret: `KEYCLOAK_CREDENTIALS_SECRET` and `SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTSECRET` (must set both) |
 | settings.keycloak.publicKey | string | `""` | Keycloak's Public Key used to verify signature of JWTs - Required. In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'.  Use the public key with Use: 'SIG' and Provider: 'rsa-generated'. |
 | settings.keycloak.realm | string | `nil` | Keycloak realm - Required |
@@ -91,6 +91,9 @@ A Helm chart for Kubernetes
 | settings.spring.datasource.url | string | `nil` | URL for the database |
 | settings.spring.datasource.username | string | `nil` | Username for the database |
 | settings.spring.profiles.active | string | `"cloud"` | Activated Spring profiles |
+| startupProbe.failureThreshold | int | `90` |  |
+| startupProbe.httpGet | object | `{"path":"/api/v1/ping","port":8080}` | Startup probe endpoint and parameters If app does not start after 15 minutes, fail the startup probe |
+| startupProbe.periodSeconds | int | `10` |  |
 | tags.keycloak | bool | `true` | Deploy a Keycloak instance |
 | tags.mysql | bool | `false` | Deploy a MySQL instance |
 | tags.postgresql | bool | `true` | Deploy a PostgreSQL instance |
