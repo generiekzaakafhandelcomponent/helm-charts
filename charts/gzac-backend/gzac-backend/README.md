@@ -1,6 +1,6 @@
 # gzac-backend
 
-![Version: 3.4.0](https://img.shields.io/badge/Version-3.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.12.0](https://img.shields.io/badge/AppVersion-12.12.0-informational?style=flat-square)
+![Version: 3.5.0](https://img.shields.io/badge/Version-3.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.12.0](https://img.shields.io/badge/AppVersion-12.12.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -77,6 +77,7 @@ A Helm chart for Kubernetes
 | settings.gzac.appHostName | string | `nil` | The hostname which exposes gzac-backend |
 | settings.gzac.connectorEncryptionSecret | string | `""` | Encryption secret Or, if using existingSecret: `VALTIMO_CONNECTORENCRYPTION_SECRET` |
 | settings.gzac.databaseType | string | `"postgres"` | Type of database to use (can by either 'postgres' or 'mysql') |
+| settings.gzac.pluginEncryptionSecret | string | `""` | Plugin encryption secret. Must be exactly 16, 24 or 32 bytes. Or, if using existingSecret: `VALTIMO_PLUGIN_ENCRYPTIONSECRET` |
 | settings.gzac.serverPort | int | `8080` | The port on which gzac-backend is listening |
 | settings.keycloak.authServerURL | string | `nil` | URL of Keycloak - Required |
 | settings.keycloak.clientID | string | `"valtimo-user-m2m-client"` | Client-ID to connect with Keycloak |
