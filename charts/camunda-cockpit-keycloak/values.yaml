@@ -123,56 +123,42 @@ settings:
       url:
       username:
       password:
-    security:
-      oauth2:
-        client:
-          registration:
-            keycloak:
-              provider: keycloak
-              clientId: camunda-identity-service
-              clientSecret:
-              authorizationGrantType: authorization_code
-              redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
-              scope: openid, profile, email
-          provider:
-            keycloak:
-              issuerUri: http://localhost/auth/realms/valtimo
-              # set user-name-attribute one of:
-              # - sub                -> default; using keycloak ID as camunda user ID
-              # - email              -> useEmailAsCamundaUserId=true
-              # - preferred_username -> useUsernameAsCamundaUserId=true
-              userNameAttribute: preferred_username
+    keycloak:
+      provider: keycloak
+      clientId: camunda-identity-service
+      clientSecret:
+      authorizationGrantType: authorization_code
+      redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+      scope: openid, profile, email
+      providerIssuerUri: http://localhost/auth/realms/valtimo
+      # set user-name-attribute one of:
+      # - sub                -> default; using keycloak ID as camunda user ID
+      # - email              -> useEmailAsCamundaUserId=true
+      # - preferred_username -> useUsernameAsCamundaUserId=true
+      providerUserNameAttribute: preferred_username 
 
   camunda:
-    bpm:
-      historyLevel: audit
-      authorization:
-        enabled: true
-      database:
-        type: postgres
-      webapp:
-        applicationPath:
-      jobExecution:
-        enabled: false
-        deploymentAware: true
-
+    historyLevel: audit
+    authorization:
+      enabled: true
+    database:
+      type: postgres
+    webapp:
+      applicationPath:
+    jobExecution:
+      enabled: false
+      deploymentAware: true
 
   plugin:
-    identity:
-      keycloak:
-        keycloakAdminUrl:
-        useEmailAsCamundaUserId: false
-        administratorGroupName: camunda-admin
-        useUsernameAsCamundaUserId: true
-        disableSSLCertificateValidation: true
-        useGroupPathAsCamundaGroupId: true
-        enforceSubgroupsInGroupQuery: true
+    keycloakAdminUrl:
+    useEmailAsCamundaUserId: false
+    administratorGroupName: camunda-admin
+    useUsernameAsCamundaUserId: true
+    disableSSLCertificateValidation: true
+    useGroupPathAsCamundaGroupId: true
+    enforceSubgroupsInGroupQuery: true
 
-  logging:
-    level:
-      org:
-        springframework:
-          security: DEBUG
+  logLevelSpringSecurity: DEBUG
 
   management:
     endpoints:

@@ -8,14 +8,8 @@ settings:
       url: https://url.postgres.test
       username: postgres
       password: postgres
-    security:
-      oauth2:
-        client:
-          registration:
-            keycloak:
-              clientSecret: test
+    keycloak:
+      clientSecret: test
 
   plugin:
-    identity:
-      keycloak:
-        keycloakAdminUrl: http://localhost/auth/admin/realms/test
+    keycloakAdminUrl: http://localhost/auth/admin/realms/test
