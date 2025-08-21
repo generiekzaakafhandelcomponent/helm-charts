@@ -1,0 +1,196 @@
+---
+# Default values for camunda-cockpit-keycloak.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Number of replicas, only in use if autoscaling is disabled.
+replicaCount: 1
+
+image:
+  repository: ghcr.io/ritense/camunda-cockpit-keycloak
+  pullPolicy: IfNotPresent
+  # -- Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# -- A list that references secrets in the same namespace.
+imagePullSecrets: []
+# -- To override the name of the chart deployed.
+nameOverride: ""
+# -- To override the name used primarily as name for the resources.
+fullnameOverride: ""
+
+serviceAccount:
+  # -- By default, the service account is created to avoid security risks when using the 'default' Kubernetes service account.
+  create: true
+  # -- Annotations to add to the service account
+  annotations: {}
+  # -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+  # -- Whether or not the service account token should be mounted into the pod. 
+  # Mounting is only required when Kubernetes API access is needed.
+  automountServiceAccountToken: false
+
+podAnnotations: {}
+
+podLabels: {}
+
+# -- An intentional strict default context. Adjust accordingly or configure 
+# container specific settings using the 'securityContext' value.
+podSecurityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  # -- Set the ingress class name, unless the default class is sufficient.
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+livenessProbe:
+  initialDelaySeconds: 40
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 6
+  successThreshold: 1
+
+readinessProbe:
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 1
+  failureThreshold: 6
+  successThreshold: 1
+
+resources:
+  # Limits are set to avoid resource based denial of service by default, adjust accordingly.
+  limits:
+   cpu: 250m
+   memory: 512Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  #targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+existingSecret: null
+
+settings:
+  server:
+    port: 8084
+    servlet:
+      contextPath: /camunda
+
+  spring:
+    application:
+      name: camunda-cockpit
+    datasource:
+      driverClassName: org.postgresql.Driver
+      url:
+      username:
+      password:
+    security:
+      oauth2:
+        client:
+          registration:
+            keycloak:
+              provider: keycloak
+              clientId: camunda-identity-service
+              clientSecret:
+              authorizationGrantType: authorization_code
+              redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+              scope: openid, profile, email
+          provider:
+            keycloak:
+              issuerUri: http://localhost/auth/realms/valtimo
+              # set user-name-attribute one of:
+              # - sub                -> default; using keycloak ID as camunda user ID
+              # - email              -> useEmailAsCamundaUserId=true
+              # - preferred_username -> useUsernameAsCamundaUserId=true
+              userNameAttribute: preferred_username
+
+  camunda:
+    bpm:
+      historyLevel: audit
+      authorization:
+        enabled: true
+      database:
+        type: postgres
+      webapp:
+        applicationPath:
+      jobExecution:
+        enabled: false
+        deploymentAware: true
+
+
+  plugin:
+    identity:
+      keycloak:
+        keycloakAdminUrl:
+        useEmailAsCamundaUserId: false
+        administratorGroupName: camunda-admin
+        useUsernameAsCamundaUserId: true
+        disableSSLCertificateValidation: true
+        useGroupPathAsCamundaGroupId: true
+        enforceSubgroupsInGroupQuery: true
+
+  logging:
+    level:
+      org:
+        springframework:
+          security: DEBUG
+
+  management:
+    endpoints:
+      web:
+        basePath: /management
+        exposure:
+          include: [ "health", "info" ]
+      jmx:
+        exposure:
+          exclude: "*"
+    endpoint:
+      health:
+        showDetails: when_authorized
+    info:
+      git:
+        mode: simple
+        enabled: true
+      build:
+        enabled: true
+      env:
+        enabled: true
