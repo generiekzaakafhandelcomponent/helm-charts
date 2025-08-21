@@ -1,6 +1,6 @@
 ---
 apiVersion: v2
-appVersion: 1.0.0
+appVersion: v0.1.0
 description: A Helm chart for deploying the Camunda Cockpit Keycloak application.
 name: camunda-cockpit-keycloak
 type: application
