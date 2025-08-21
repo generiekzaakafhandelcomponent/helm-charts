@@ -35,22 +35,23 @@ podAnnotations: {}
 
 podLabels: {}
 
-# -- An intentional strict default context. Adjust accordingly or configure 
+# -- An intentional strict default pod context. Adjust accordingly or configure 
 # container specific settings using the 'securityContext' value.
 podSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+
+# -- An intentional strict default container context. Adjust accordingly.
+securityContext:
   capabilities:
     drop:
     - ALL
   readOnlyRootFilesystem: true
-  runAsUser: 1000
-  runAsGroup: 1000
-  fsGroup: 1000
   allowPrivilegeEscalation: false
   runAsNonRoot: true
   seccompProfile:
     type: RuntimeDefault
-
-securityContext: {}
 
 service:
   type: ClusterIP
