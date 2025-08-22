@@ -1,0 +1,55 @@
+name: Camunda Cockpit Keycloak - run Helm lint, generate and push README to PR source branch
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "charts/camunda-cockpit-keycloak/**"
+
+jobs:
+  helm-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the PR source branch
+        uses: actions/checkout@v4
+
+      - name: Install helm
+        uses: Azure/setup-helm@v3
+        with:
+          version: 3.9.0
+      - name: Helm Lint
+        run: |
+          cd charts/camunda-cockpit-keycloak
+          helm lint
+
+  add-readme-if-missing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the PR source branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update README.md with helm-docs
+        env:
+          HELM_DOCS_VERSION: v1.14.2
+        run: |
+          cd charts/camunda-cockpit-keycloak
+          docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) "jnorwood/helm-docs:${HELM_DOCS_VERSION}"
+
+      - name: Push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd charts/camunda-cockpit-keycloak
+          git add .
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "README is up-to-date. No changes to commit."
+          else
+            git commit -m "Update README.md automatically via GitHub Actions"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
