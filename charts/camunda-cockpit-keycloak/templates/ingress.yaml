@@ -1,5 +1,5 @@
----
 {{- if .Values.ingress.enabled -}}
+---
 {{- $fullName := include "camunda-cockpit-keycloak.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
