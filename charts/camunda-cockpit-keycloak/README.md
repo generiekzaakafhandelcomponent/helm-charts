@@ -3,17 +3,16 @@
 ![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 A Helm chart for deploying the Camunda Cockpit Keycloak application.
+Documention is rendered using the helm-docs binary. Run `helm-docs` prior
+to commiting when changing the Helm values.
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` |  |
-| autoscaling.enabled | bool | `false` |  |
-| autoscaling.maxReplicas | int | `10` |  |
-| autoscaling.minReplicas | int | `1` |  |
-| autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
-| existingSecret | string | `nil` |  |
+| autoscaling | object | `{"enabled":false,"maxReplicas":10,"minReplicas":1,"targetCPUUtilizationPercentage":80}` | Enabling autoscaling will automatically render the `replicaCount` value unused. |
+| existingSecret | string | `nil` | Provide the name of a Secret containing the same keys as  the keys as the Secret in 'secret.yaml' in this chart. |
 | fullnameOverride | string | `""` | To override the name used primarily as name for the resources. |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"ghcr.io/ritense/camunda-cockpit-keycloak"` |  |
@@ -42,8 +41,7 @@ A Helm chart for deploying the Camunda Cockpit Keycloak application.
 | readinessProbe.successThreshold | int | `1` |  |
 | readinessProbe.timeoutSeconds | int | `1` |  |
 | replicaCount | int | `1` | Number of replicas, only in use if autoscaling is disabled. |
-| resources.limits.cpu | string | `"250m"` |  |
-| resources.limits.memory | string | `"512Mi"` |  |
+| resources.limits | object | `{"cpu":"250m","memory":"512Mi"}` | Limits are set to avoid resource based denial of service by default, adjust accordingly. |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true,"seccompProfile":{"type":"RuntimeDefault"}}` | An intentional strict default container context. Adjust accordingly. |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
