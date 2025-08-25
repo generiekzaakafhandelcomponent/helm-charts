@@ -20,7 +20,7 @@ jobs:
           version: 3.9.0
       - name: Helm Lint
         run: |
-          cd charts/camunda-cockpit-keycloak
+          cd charts/camunda-cockpit-keycloak/camunda-cockpit-keycloak
           helm lint
 
   add-readme-if-missing:
@@ -36,14 +36,14 @@ jobs:
         env:
           HELM_DOCS_VERSION: v1.14.2
         run: |
-          cd charts/camunda-cockpit-keycloak
+          cd charts/camunda-cockpit-keycloak/camunda-cockpit-keycloak
           docker run --rm --volume "$(pwd):/helm-docs" -u $(id -u) "jnorwood/helm-docs:${HELM_DOCS_VERSION}"
 
       - name: Push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd charts/camunda-cockpit-keycloak
+          cd charts/camunda-cockpit-keycloak/camunda-cockpit-keycloak
           git add .
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
