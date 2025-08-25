@@ -169,7 +169,9 @@ settings:
       web:
         basePath: /management
         exposure:
-          include: [ "health", "info" ]
+          include: 
+            - "health"
+            - "info"
       jmx:
         exposure:
           exclude: "*"

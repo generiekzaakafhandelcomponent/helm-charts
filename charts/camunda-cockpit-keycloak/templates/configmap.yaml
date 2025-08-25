@@ -54,7 +54,7 @@ data:
   {{- end }}
   {{- with .Values.settings.management }}
   MANAGEMENT_ENDPOINTS_WEB_BASEPATH: {{ .endpoints.web.basePath | quote }}
-  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: {{ toJson .endpoints.web.exposure.include | quote }}
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: {{ .endpoints.web.exposure.include | join "," | quote }}
   MANAGEMENT_ENDPOINTS_JMX_EXPOSURE_EXCLUDE: {{ .endpoints.jmx.exposure.exclude | quote }}
   MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS: {{ .endpoint.health.showDetails | quote }}
   MANAGEMENT_INFO_GIT_MODE: {{ .info.git.mode | quote }}
