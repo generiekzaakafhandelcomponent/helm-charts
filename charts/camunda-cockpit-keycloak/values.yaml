@@ -47,7 +47,7 @@ securityContext:
   capabilities:
     drop:
     - ALL
-  readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: false
   allowPrivilegeEscalation: false
   runAsNonRoot: true
   seccompProfile:
@@ -80,11 +80,16 @@ livenessProbe:
   successThreshold: 1
 
 readinessProbe:
-  initialDelaySeconds: 20
-  periodSeconds: 10
+  initialDelaySeconds: 30
+  periodSeconds: 20
   timeoutSeconds: 1
   failureThreshold: 6
   successThreshold: 1
+
+startupProbe:
+  failureThreshold: 30
+  periodSeconds: 10
+
 
 resources:
   # -- Limits are set to avoid resource based denial of service by default, adjust accordingly.
@@ -132,9 +137,9 @@ settings:
       clientId: camunda-identity-service
       clientSecret:
       authorizationGrantType: authorization_code
-      redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+      redirectUri: /login/oauth2/code/keycloak
       scope: openid, profile, email
-      providerIssuerUri: http://localhost/auth/realms/valtimo
+      providerIssuerUri: ""
       # set user-name-attribute one of:
       # - sub                -> default; using keycloak ID as camunda user ID
       # - email              -> useEmailAsCamundaUserId=true
@@ -170,8 +175,8 @@ settings:
         basePath: /management
         exposure:
           include: 
-            - "health"
-            - "info"
+          - "health"
+          - "info"
       jmx:
         exposure:
           exclude: "*"
