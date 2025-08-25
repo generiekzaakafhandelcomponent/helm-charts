@@ -7,4 +7,4 @@ description: |
   to commiting when changing the Helm values.
 name: camunda-cockpit-keycloak
 type: application
-version: 0.0.0
+version: 0.1.0
