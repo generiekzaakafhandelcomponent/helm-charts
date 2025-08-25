@@ -1,0 +1,10 @@
+---
+apiVersion: v2
+appVersion: v0.1.0
+description: |
+  A Helm chart for deploying the Camunda Cockpit Keycloak application.
+  Documention is rendered using the helm-docs binary. Run `helm-docs` prior
+  to commiting when changing the Helm values.
+name: camunda-cockpit-keycloak
+type: application
+version: 0.0.0

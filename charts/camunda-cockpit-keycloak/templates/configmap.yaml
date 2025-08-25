@@ -1,0 +1,65 @@
+---
+# The keys of the ConfigMap will be environment variables for the pod.
+# In line with Spring Boot's relaxed binding, settings from the 
+# 'application.yml' file is transformed using the following steps:
+#   1. Replace dots (.) with underscores (_).
+#   2. Remove any dashes (-).
+#   3. Convert to uppercase.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "camunda-cockpit-keycloak.fullname" . }}
+  labels:
+    {{- include "camunda-cockpit-keycloak.labels" . | nindent 4 }}
+data:
+  SERVER_PORT: {{ .Values.settings.server.port | quote }}
+  SERVER_SERVLET_CONTEXTPATH: {{ .Values.settings.server.servlet.contextPath | quote }}
+  {{- with .Values.settings.spring }}
+  SPRING_APPLICATION_NAME: {{ .application.name | quote }}
+  SPRING_DATASOURCE_DRIVERCLASSNAME: {{ .datasource.driverClassName | quote }}
+  SPRING_DATASOURCE_URL: {{ .datasource.url | quote }}
+  SPRING_DATASOURCE_USERNAME: {{ .datasource.username | quote }}
+  {{- end }}
+  {{- with .Values.settings.camunda }}
+  CAMUNDA_BPM_HISTORYLEVEL: {{ .historyLevel | quote }}
+  CAMUNDA_BPM_AUTHORIZATION_ENABLED: {{ .authorization.enabled | quote }}
+  CAMUNDA_BPM_DATABASE_TYPE: {{ .database.type | quote }}
+  CAMUNDA_BPM_WEBAPP_APPLICATIONPATH: {{ .webapp.applicationPath | quote }}
+  CAMUNDA_BPM_JOBEXECUTION_ENABLED: {{ .jobExecution.enabled | quote }}
+  CAMUNDA_BPM_JOBEXECUTION_DEPLOYMENTAWARE: {{ .jobExecution.deploymentAware | quote }}
+  {{- end }}
+  {{- with .Values.settings.plugin }}
+  PLUGIN_IDENTITY_KEYCLOAK_KEYCLOAKADMINURL: {{ .keycloakAdminUrl | quote }}
+  PLUGIN_IDENTITY_KEYCLOAK_USEEMAILASCAMUNDAUSERID: {{ .useEmailAsCamundaUserId | quote }}
+  PLUGIN_IDENTITY_KEYCLOAK_ADMINISTRATORGROUPNAME: {{ .administratorGroupName | quote }}
+  PLUGIN_IDENTITY_KEYCLOAK_USEUSERNAMEASCAMUNDAUSERID: {{ .useUsernameAsCamundaUserId | quote }}
+  PLUGIN_IDENTITY_KEYCLOAK_DISABLESSLCERTIFICATEVALIDATION: {{ .disableSSLCertificateValidation | quote }}
+  PLUGIN_IDENTITY_KEYCLOAK_USEGROUPPATHASCAMUNDAGROUPID: {{ .useGroupPathAsCamundaGroupId | quote }}
+  PLUGIN_IDENTITY_KEYCLOAK_ENFORCESUBGROUPSINGROUPQUERY: {{ .enforceSubgroupsInGroupQuery | quote }}
+  {{- end }}
+  {{- with .Values.settings.spring.keycloak }}
+  PLUGIN_IDENTITY_KEYCLOAK_KEYCLOAKISSUERURL: {{ .providerIssuerUri | quote }}
+  PLUGIN_IDENTITY_KEYCLOAK_CLIENTID: {{ .clientId | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_PROVIDER: {{ .provider | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTID: {{ .clientId | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_AUTHORIZATIONGRANTTYPE: {{ .authorizationGrantType | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_REDIRECTURI: {{ .redirectUri | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_SCOPE: {{ .scope | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: {{ .providerIssuerUri | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_AUTHORIZATIONURI: {{ print .providerIssuerUri "/protocol/openid-connect/auth" | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USERINFOURI: {{ print .providerIssuerUri "/protocol/openid-connect/userinfo" | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKENURI: {{ print .providerIssuerUri "/protocol/openid-connect/token" | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_JWKSETURI: {{ print .providerIssuerUri "/protocol/openid-connect/certs" | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USERNAMEATTRIBUTE: {{ .providerUserNameAttribute | quote }}
+  {{- end }}
+  {{- with .Values.settings.management }}
+  MANAGEMENT_ENDPOINTS_WEB_BASEPATH: {{ .endpoints.web.basePath | quote }}
+  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: {{ .endpoints.web.exposure.include | join "," | quote }}
+  MANAGEMENT_ENDPOINTS_JMX_EXPOSURE_EXCLUDE: {{ .endpoints.jmx.exposure.exclude | quote }}
+  MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS: {{ .endpoint.health.showDetails | quote }}
+  MANAGEMENT_INFO_GIT_MODE: {{ .info.git.mode | quote }}
+  MANAGEMENT_INFO_GIT_ENABLED: {{ .info.git.enabled | quote }}
+  MANAGEMENT_INFO_BUILD_ENABLED: {{ .info.build.enabled | quote }}
+  MANAGEMENT_INFO_ENV_ENABLED: {{ .info.env.enabled | quote }}
+  {{- end }}
+  LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: {{ .Values.settings.logLevelSpringSecurity | quote }}
