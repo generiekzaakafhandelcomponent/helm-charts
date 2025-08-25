@@ -1,5 +1,18 @@
 apiVersion: v1
 entries:
+  camunda-cockpit-keycloak:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2025-08-25T14:02:32.81784749Z"
+    description: 'A Helm chart for deploying the Camunda Cockpit Keycloak application.
+      Documention is rendered using the helm-docs binary. Run `helm-docs` prior to
+      commiting when changing the Helm values. '
+    digest: 2cd744848df279bf3c3f5ac3a14a51feb64f04e44fa502030a15bf45069174a6
+    name: camunda-cockpit-keycloak
+    type: application
+    urls:
+    - https://github.com/generiekzaakafhandelcomponent/helm-charts/releases/download/camunda-cockpit-keycloak-0.1.0/camunda-cockpit-keycloak-0.1.0.tgz
+    version: 0.1.0
   gzac-backend:
   - apiVersion: v2
     appVersion: 12.12.0
@@ -964,4 +977,4 @@ entries:
     urls:
     - https://github.com/generiekzaakafhandelcomponent/helm-charts/releases/download/gzac-frontend-0.1.0/gzac-frontend-0.1.0.tgz
     version: 0.1.0
-generated: "2025-08-05T08:08:36.186626779Z"
+generated: "2025-08-25T14:02:32.81796992Z"
