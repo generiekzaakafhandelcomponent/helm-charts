@@ -36,13 +36,13 @@ to commiting when changing the Helm values.
 | podLabels | object | `{}` |  |
 | podSecurityContext | object | `{"fsGroup":1000,"runAsGroup":1000,"runAsUser":1000}` | An intentional strict default pod context. Adjust accordingly or configure  container specific settings using the 'securityContext' value. |
 | readinessProbe.failureThreshold | int | `6` |  |
-| readinessProbe.initialDelaySeconds | int | `20` |  |
-| readinessProbe.periodSeconds | int | `10` |  |
+| readinessProbe.initialDelaySeconds | int | `30` |  |
+| readinessProbe.periodSeconds | int | `20` |  |
 | readinessProbe.successThreshold | int | `1` |  |
 | readinessProbe.timeoutSeconds | int | `1` |  |
 | replicaCount | int | `1` | Number of replicas, only in use if autoscaling is disabled. |
 | resources.limits | object | `{"cpu":"250m","memory":"512Mi"}` | Limits are set to avoid resource based denial of service by default, adjust accordingly. |
-| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsNonRoot":true,"seccompProfile":{"type":"RuntimeDefault"}}` | An intentional strict default container context. Adjust accordingly. |
+| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsNonRoot":true,"seccompProfile":{"type":"RuntimeDefault"}}` | An intentional strict default container context. Adjust accordingly. |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
@@ -83,10 +83,12 @@ to commiting when changing the Helm values.
 | settings.spring.keycloak.clientId | string | `"camunda-identity-service"` |  |
 | settings.spring.keycloak.clientSecret | string | `nil` |  |
 | settings.spring.keycloak.provider | string | `"keycloak"` |  |
-| settings.spring.keycloak.providerIssuerUri | string | `"http://localhost/auth/realms/valtimo"` |  |
+| settings.spring.keycloak.providerIssuerUri | string | `""` |  |
 | settings.spring.keycloak.providerUserNameAttribute | string | `"preferred_username"` |  |
-| settings.spring.keycloak.redirectUri | string | `"{baseUrl}/{action}/oauth2/code/{registrationId}"` |  |
+| settings.spring.keycloak.redirectUri | string | `"/login/oauth2/code/keycloak"` |  |
 | settings.spring.keycloak.scope | string | `"openid, profile, email"` |  |
+| startupProbe.failureThreshold | int | `30` |  |
+| startupProbe.periodSeconds | int | `10` |  |
 | tolerations | list | `[]` |  |
 
 ----------------------------------------------
