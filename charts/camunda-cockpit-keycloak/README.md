@@ -1,6 +1,6 @@
 # camunda-cockpit-keycloak
 
-![Version: 0.0.0](https://img.shields.io/badge/Version-0.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 A Helm chart for deploying the Camunda Cockpit Keycloak application.
 Documention is rendered using the helm-docs binary. Run `helm-docs` prior
@@ -73,7 +73,7 @@ to commiting when changing the Helm values.
 | settings.plugin.useGroupPathAsCamundaGroupId | bool | `true` |  |
 | settings.plugin.useUsernameAsCamundaUserId | bool | `true` |  |
 | settings.server.port | int | `8084` |  |
-| settings.server.servlet.contextPath | string | `"/camunda"` |  |
+| settings.server.servlet.contextPath | string | `"/"` |  |
 | settings.spring.application.name | string | `"camunda-cockpit"` |  |
 | settings.spring.datasource.driverClassName | string | `"org.postgresql.Driver"` |  |
 | settings.spring.datasource.password | string | `nil` |  |
