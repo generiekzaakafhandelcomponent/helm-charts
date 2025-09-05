@@ -267,6 +267,9 @@ settings:
     # -- Encryption secret
     # Or, if using existingSecret: `VALTIMO_CONNECTORENCRYPTION_SECRET`
     connectorEncryptionSecret: ""
+    # -- Plugin encryption secret. Must be exactly 16, 24 or 32 bytes.
+    # Or, if using existingSecret: `VALTIMO_PLUGIN_ENCRYPTIONSECRET`
+    pluginEncryptionSecret: ""
 
   camunda: 
     # -- Default Camunda admin user

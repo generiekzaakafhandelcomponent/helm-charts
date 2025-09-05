@@ -1,0 +1,35 @@
+name: Build and Publish Camunda Cockpit Keycloak helmchart
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "charts/camunda-cockpit-keycloak/**"
+    branches:
+      - main
+
+jobs:
+  build_gzac_backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: install helm
+        uses: Azure/setup-helm@v3
+        with:
+          version: 3.9.0
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.5.0
+        with:
+          charts_dir: charts/camunda-cockpit-keycloak
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
