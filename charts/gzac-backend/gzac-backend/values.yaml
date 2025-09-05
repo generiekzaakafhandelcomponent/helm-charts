@@ -277,6 +277,12 @@ settings:
     # -- Default Camunda admin password. 
     # Or, if using existingSecret: `CAMUNDA_BPM_ADMINUSER_PASSWORD`
     adminUserPassword: ""
+  operaton: 
+    # -- Default Operaton admin user
+    adminUserID: "admin"
+    # -- Default Operaton admin password. 
+    # Or, if using existingSecret: `OPERATON_BPM_ADMINUSER_PASSWORD`
+    adminUserPassword: ""
 
 ##########################################################################
 ## PostgreSQL subchart                                                  ##
