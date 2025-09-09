@@ -33,10 +33,10 @@ A Helm chart for Kubernetes
 | imagePullSecrets | list | `[]` | Image pull secrets |
 | ingress.annotations | object | `{}` | Ingress annotations |
 | ingress.enabled | bool | `false` | Expose the gzac-backend UI through an ingress |
-| ingress.hosts[0].host | string | `"chart-example.local"` | Ingress hostname |
-| ingress.hosts[0].paths | list | `[{"backend":{"service":{"name":null,"port":{"number":null}}},"path":"/api","pathType":"Prefix"},{"backend":{"service":{"name":null,"port":{"number":null}}},"path":"/v3","pathType":"Prefix"},{"backend":{"service":{"name":null,"port":{"number":null}}},"path":"/camunda","pathType":"Prefix"}]` | Ingress paths to route to the gzac backend. Recommended to keep these default values. |
+| ingress.host | string | `"gzac.example.com"` | Hosts at which Valtimo/GZAC can be reached. |
 | ingress.ingressClassName | string | `""` | Ingress Class which will be used to implement the Ingress |
-| ingress.tls | list | `[]` | Enable TLS for the Ingress |
+| ingress.tls | list | `[]` | TLS configuration |
+| ingress.tlsSecretName | string | `""` | TLS secret name |
 | keycloak | object | `{"auth":{"adminPassword":"","adminUser":"user","existingSecret":""}}` | Keycloak subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/keycloak?modal=values for all possible values |
 | livenessProbe.failureThreshold | int | `3` | Failure threshold for livenessProbe |
 | livenessProbe.httpGet.path | string | `"/api/v1/ping"` |  |
@@ -72,8 +72,6 @@ A Helm chart for Kubernetes
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | If not set and create is true, a name is generated using the fullname template |
-| settings.camunda.adminUserID | string | `"admin"` | Default Camunda admin user |
-| settings.camunda.adminUserPassword | string | `""` | Default Camunda admin password.  Or, if using existingSecret: `CAMUNDA_BPM_ADMINUSER_PASSWORD` |
 | settings.gzac.appHostName | string | `nil` | The hostname which exposes gzac-backend |
 | settings.gzac.connectorEncryptionSecret | string | `""` | Encryption secret Or, if using existingSecret: `VALTIMO_CONNECTORENCRYPTION_SECRET` |
 | settings.gzac.databaseType | string | `"postgres"` | Type of database to use (can by either 'postgres' or 'mysql') |
@@ -86,6 +84,8 @@ A Helm chart for Kubernetes
 | settings.keycloak.publicKey | string | `""` | Keycloak's Public Key used to verify signature of JWTs - Required. In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'.  Use the public key with Use: 'SIG' and Provider: 'rsa-generated'. |
 | settings.keycloak.realm | string | `nil` | Keycloak realm - Required |
 | settings.keycloak.version | string | `""` | Keycloak version you are running against - Required |
+| settings.operaton.adminUserID | string | `"admin"` | Default Operaton admin user |
+| settings.operaton.adminUserPassword | string | `""` | Default Operaton admin password.  Or, if using existingSecret: `OPERATON_BPM_ADMINUSER_PASSWORD` |
 | settings.spring.actuator.password | string | `""` | Password to access the Spring actuator endpoint. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
 | settings.spring.actuator.username | string | `"admin"` | Username to access the Spring actuator endpoint |
 | settings.spring.datasource.password | string | `""` | Password for the database. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |

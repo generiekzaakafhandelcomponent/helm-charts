@@ -34,34 +34,57 @@ spec:
         - {{ . | quote }}
         {{- end }}
       secretName: {{ .secretName }}
+      {{- end }}
     {{- end }}
-  {{- end }}
+
+  {{- if or .Values.ingress.hosts .Values.ingress.host }}
   rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
+    {{- if .Values.ingress.host }}
+    - host: {{ .Values.ingress.host | quote }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
-            pathType: {{ .pathType }}
-            {{- end }}
-            backend:
-              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
-              service:
-                name: {{ .backend.service.name | default $fullName }}
-                port:
-                  {{- if and (hasKey .backend.service.port "name") (ne .backend.service.port.name "") }}
-                  name: {{ .backend.service.port.name }}
-                  {{- else }}
-                  number: {{ .backend.service.port.number | default $svcPort }}
-                  {{- end }}
-              {{- else }}
-              serviceName: {{ $fullName }}
-              servicePort: {{ $svcPort }}
-              {{- end }}
+        - path: /api
+          {{- if and (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+          pathType: Prefix
           {{- end }}
+          backend:
+            {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+            service:
+              name: {{ $fullName }}
+              port:
+                number: {{ $svcPort }}
+            {{- else }}
+            serviceName: {{ $fullName }}
+            servicePort: {{ $svcPort }}
+            {{- end }}
+        - path: /v3
+          {{- if and (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+          pathType: Prefix
+          {{- end }}
+          backend:
+            {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+            service:
+              name: {{ $fullName }}
+              port:
+                number: {{ $svcPort }}
+            {{- else }}
+            serviceName: {{ $fullName }}
+            servicePort: {{ $svcPort }}
+            {{- end}}
+        - path: /operaton
+          {{- if and (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+          pathType: Prefix
+          {{- end }}
+          backend:
+            {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+            service:
+              name: {{ $fullName }}
+              port:
+                number: {{ $svcPort }}
+            {{- else }}
+            serviceName: {{ $fullName }}
+            servicePort: {{ $svcPort }}
+            {{- end }}
+      {{- end }}
     {{- end }}
-  {{- end }}
-
-
+{{- end }}
