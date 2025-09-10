@@ -1,16 +1,8 @@
 # gzac-backend
 
-![Version: 3.5.0](https://img.shields.io/badge/Version-3.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 12.12.0](https://img.shields.io/badge/AppVersion-12.12.0-informational?style=flat-square)
+![Version: 4.0.0](https://img.shields.io/badge/Version-4.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 13.1.x](https://img.shields.io/badge/AppVersion-13.1.x-informational?style=flat-square)
 
 A Helm chart for Kubernetes
-
-## Requirements
-
-| Repository | Name | Version |
-|------------|------|---------|
-| oci://registry-1.docker.io/bitnamicharts | keycloak | ~15.1.2 |
-| oci://registry-1.docker.io/bitnamicharts | mysql | ~9.10.1 |
-| oci://registry-1.docker.io/bitnamicharts | postgresql | ~12.5.6 |
 
 ## Values
 
@@ -27,6 +19,8 @@ A Helm chart for Kubernetes
 | extraVolumeMounts | list | `[]` | Optionally specify extra list of additional volumeMounts |
 | extraVolumes | list | `[]` | Optionally specify extra list of additional volumes |
 | fullnameOverride | string | `""` | String to fully override gzac-backend.fullname |
+| gzac | object | `{"apiUrl":""}` | Chart-specific settings used by templates (not application settings) |
+| gzac.apiUrl | string | `""` | Explicit API URL. When unset, it falls back to https://<ingress.host>/api/v1 |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy for the image |
 | image.repository | string | `"ritense/gzac-backend"` | Domain of the image repository |
 | image.tag | string | `"12.2.1"` | Overrides the image tag whose default is the chart appVersion. |
@@ -36,14 +30,11 @@ A Helm chart for Kubernetes
 | ingress.host | string | `"gzac.example.com"` | Hosts at which Valtimo/GZAC can be reached. |
 | ingress.ingressClassName | string | `""` | Ingress Class which will be used to implement the Ingress |
 | ingress.tls | list | `[]` | TLS configuration |
-| ingress.tlsSecretName | string | `""` | TLS secret name |
-| keycloak | object | `{"auth":{"adminPassword":"","adminUser":"user","existingSecret":""}}` | Keycloak subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/keycloak?modal=values for all possible values |
 | livenessProbe.failureThreshold | int | `3` | Failure threshold for livenessProbe |
 | livenessProbe.httpGet.path | string | `"/api/v1/ping"` |  |
 | livenessProbe.httpGet.port | int | `8080` |  |
 | livenessProbe.initialDelaySeconds | int | `10` | Initial delay seconds for livenessProbe |
 | livenessProbe.periodSeconds | int | `40` | Period seconds for livenessProbe |
-| mysql | object | `{"auth":{"existingSecret":"","rootPassword":""}}` | MySQL subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/mysql?modal=values for all possible values |
 | nameOverride | string | `""` | Name override for gzac-backend |
 | nodeSelector | object | `{}` | Node labels for gzac-backend pods assignment |
 | persistence.annotations | object | `{}` |  |
@@ -55,7 +46,6 @@ A Helm chart for Kubernetes
 | podAnnotations | object | `{}` | Annotations for gzac-backend pods |
 | podLabels | object | `{}` | Labels for gzac-backend pods |
 | podSecurityContext.fsGroup | int | `1000` | Set gzac-backend's pod security fsGroup |
-| postgresql | object | `{"auth":{"existingSecret":"","postgresPassword":"","secretKeys":{"adminPasswordKey":"","replicationPasswordKey":"","userPasswordKey":""}}}` | Postgresql subchart by Bitnami. See https://artifacthub.io/packages/helm/bitnami/postgresql?modal=values for all possible values |
 | readinessProbe.failureThreshold | int | `3` | Failure threshold for readinessProbe |
 | readinessProbe.httpGet.path | string | `"/api/v1/ping"` |  |
 | readinessProbe.httpGet.port | int | `8080` |  |
@@ -72,18 +62,19 @@ A Helm chart for Kubernetes
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | If not set and create is true, a name is generated using the fullname template |
-| settings.gzac.appHostName | string | `nil` | The hostname which exposes gzac-backend |
+| settings.gzac.appHostName | string | `nil` | Optional: The hostname which exposes gzac-backend Defaults to https://<ingress.host> |
 | settings.gzac.connectorEncryptionSecret | string | `""` | Encryption secret Or, if using existingSecret: `VALTIMO_CONNECTORENCRYPTION_SECRET` |
 | settings.gzac.databaseType | string | `"postgres"` | Type of database to use (can by either 'postgres' or 'mysql') |
-| settings.gzac.pluginEncryptionSecret | string | `""` | Plugin encryption secret. Must be exactly 16, 24 or 32 bytes. Or, if using existingSecret: `VALTIMO_PLUGIN_ENCRYPTIONSECRET` |
+| settings.gzac.pluginEncryptionSecret | string | `""` | Required if using Valtimo/GZAC plugins: Plugin encryption secret. Must be exactly 16, 24 or 32 bytes. Or, if using existingSecret: `VALTIMO_PLUGIN_ENCRYPTIONSECRET` |
 | settings.gzac.serverPort | int | `8080` | The port on which gzac-backend is listening |
-| settings.keycloak.authServerURL | string | `nil` | URL of Keycloak - Required |
+| settings.keycloak.authServerURL | string | `nil` | Required: Plain URL of Keycloak |
 | settings.keycloak.clientID | string | `"valtimo-user-m2m-client"` | Client-ID to connect with Keycloak |
 | settings.keycloak.clientRoleID | string | `"valtimo-console"` | Client-ID for using Valtimo with Keycloak client roles. More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles Set to `null` to disable client roles entirely and use realm roles instead. |
 | settings.keycloak.clientSecret | string | `""` | Client-Secret to connect with Keycloak. Or, if using existingSecret: `KEYCLOAK_CREDENTIALS_SECRET` and `SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTSECRET` (must set both) |
-| settings.keycloak.publicKey | string | `""` | Keycloak's Public Key used to verify signature of JWTs - Required. In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'.  Use the public key with Use: 'SIG' and Provider: 'rsa-generated'. |
-| settings.keycloak.realm | string | `nil` | Keycloak realm - Required |
-| settings.keycloak.version | string | `""` | Keycloak version you are running against - Required |
+| settings.keycloak.httpRelativePath | string | `nil` | Optional: Override Keycloak's HTTP relative path. Leave empty for default.    For Keycloak < 17, default is "/auth"; for >= 17, default is "". |
+| settings.keycloak.publicKey | string | `""` | Required: Keycloak's Public Key used to verify signature of JWTs. In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'.  Use the public key with Use: 'SIG' and Provider: 'rsa-generated'. |
+| settings.keycloak.realm | string | `nil` | Required: Keycloak realm |
+| settings.keycloak.version | string | `""` | Required: Keycloak version you are running against |
 | settings.operaton.adminUserID | string | `"admin"` | Default Operaton admin user |
 | settings.operaton.adminUserPassword | string | `""` | Default Operaton admin password.  Or, if using existingSecret: `OPERATON_BPM_ADMINUSER_PASSWORD` |
 | settings.spring.actuator.password | string | `""` | Password to access the Spring actuator endpoint. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |

@@ -77,8 +77,6 @@ ingress:
   host: "gzac.example.com"
   # -- TLS configuration
   tls: []
-  # -- TLS secret name
-  tlsSecretName: ""
 
 startupProbe:
   # -- Startup probe endpoint and parameters
