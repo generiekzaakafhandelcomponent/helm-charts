@@ -74,7 +74,8 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   # -- Hosts at which Valtimo/GZAC can be reached.
-  host: "gzac.example.com"
+  #    Note: several URLs are inferred from the FIRST entry in this list.
+  hosts: ["gzac.example.com"]
   # -- TLS configuration
   tls: []
 
@@ -168,8 +169,8 @@ existingSecret: null
 
 # -- Chart-specific settings used by templates (not application settings)
 gzac:
-  # -- Explicit API URL. When unset, it falls back to https://<ingress.host>/api/v1
-  apiUrl: ""
+  # -- Explicit API URL. When unset, it falls back to https://<ingress.hosts[0]>/api/v1
+  apiUrl:
 
 persistence:
   # -- Enable/disable persistent volumes for Gzac-backend
@@ -244,7 +245,7 @@ settings:
     # -- Type of database to use (can by either 'postgres' or 'mysql')
     databaseType: "postgres"
     # -- Optional: The hostname which exposes gzac-backend
-    # Defaults to https://<ingress.host>
+    # -- Defaults to https://<ingress.hosts[0]>
     appHostName: 
     # -- The port on which gzac-backend is listening
     serverPort: 8080

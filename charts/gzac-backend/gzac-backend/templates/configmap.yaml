@@ -33,18 +33,19 @@ data:
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTID: {{ .Values.settings.keycloak.clientID | quote }}
   VALTIMO_KEYCLOAK_CLIENT: {{ .Values.settings.keycloak.clientID | quote }}
   KEYCLOAK_RESOURCE: {{ .Values.settings.keycloak.clientID | quote }}
+  {{- /* Determine app hostname: explicit setting, else first ingress host */}}
   VALTIMO_APP_HOSTNAME: {{- if .Values.settings.gzac.appHostName }}
       {{ .Values.settings.gzac.appHostName | quote }}
-    {{- else if .Values.ingress.host }}
-      {{ print "https://" .Values.settings.gzac.appHostName | quote }}
+    {{- else if and .Values.ingress.hosts (gt (len .Values.ingress.hosts) 0) }}
+      {{ printf "https://%s" (index .Values.ingress.hosts 0) | quote }}
     {{- else }}
       ""
     {{- end }}
   
   VALTIMO_API_URL: {{- if .Values.gzac.apiUrl }}
       {{ .Values.gzac.apiUrl | quote }}
-    {{- else if .Values.ingress.host }}
-      {{ print "https://" .Values.ingress.host "/api/v1" | quote  }}
+    {{- else if and .Values.ingress.hosts (gt (len .Values.ingress.hosts) 0) }}
+      {{ printf "https://%s/api/v1" (index .Values.ingress.hosts 0) | quote }}
     {{- else }}
       ""
     {{- end }}

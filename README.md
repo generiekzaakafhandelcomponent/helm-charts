@@ -28,8 +28,7 @@ The generated list of published helm releases can be found [here](https://generi
 ### GZAC backend Helm chart version 3 to 4
 
 - Ingress
-  - Old: `ingress.hosts`
-  - New: Remove `ingress.hosts` completely. Set `ingress.host` (singular) to the GZAC backend hostname. Default Ingress rules are inferred from this.
+  - `ingress.hosts` now expects only an array of hosts on which the backend should be exposed. The correct configuration of paths will be applied to each, and you do not have to specify this by yourself anymore.
 - Operaton (was Camunda)
   - `settings.camunda.adminUserID` → `settings.operaton.adminUserID`
   - `settings.camunda.adminUserPassword` → `settings.operaton.adminUserPassword`
