@@ -19,15 +19,15 @@ A Helm chart for Kubernetes
 | extraVolumeMounts | list | `[]` | Optionally specify extra list of additional volumeMounts |
 | extraVolumes | list | `[]` | Optionally specify extra list of additional volumes |
 | fullnameOverride | string | `""` | String to fully override gzac-backend.fullname |
-| gzac | object | `{"apiUrl":""}` | Chart-specific settings used by templates (not application settings) |
-| gzac.apiUrl | string | `""` | Explicit API URL. When unset, it falls back to https://<ingress.host>/api/v1 |
+| gzac | object | `{"apiUrl":null}` | Chart-specific settings used by templates (not application settings) |
+| gzac.apiUrl | string | `nil` | Explicit API URL. When unset, it falls back to https://<ingress.hosts[0]>/api/v1 |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy for the image |
 | image.repository | string | `"ritense/gzac-backend"` | Domain of the image repository |
 | image.tag | string | `"12.2.1"` | Overrides the image tag whose default is the chart appVersion. |
 | imagePullSecrets | list | `[]` | Image pull secrets |
 | ingress.annotations | object | `{}` | Ingress annotations |
 | ingress.enabled | bool | `false` | Expose the gzac-backend UI through an ingress |
-| ingress.host | string | `"gzac.example.com"` | Hosts at which Valtimo/GZAC can be reached. |
+| ingress.hosts | list | `["gzac.example.com"]` | Hosts at which Valtimo/GZAC can be reached.    Note: several URLs are inferred from the FIRST entry in this list. |
 | ingress.ingressClassName | string | `""` | Ingress Class which will be used to implement the Ingress |
 | ingress.tls | list | `[]` | TLS configuration |
 | livenessProbe.failureThreshold | int | `3` | Failure threshold for livenessProbe |
@@ -62,7 +62,7 @@ A Helm chart for Kubernetes
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | If not set and create is true, a name is generated using the fullname template |
-| settings.gzac.appHostName | string | `nil` | Optional: The hostname which exposes gzac-backend Defaults to https://<ingress.host> |
+| settings.gzac.appHostName | string | `nil` | Defaults to https://<ingress.hosts[0]> |
 | settings.gzac.connectorEncryptionSecret | string | `""` | Encryption secret Or, if using existingSecret: `VALTIMO_CONNECTORENCRYPTION_SECRET` |
 | settings.gzac.databaseType | string | `"postgres"` | Type of database to use (can by either 'postgres' or 'mysql') |
 | settings.gzac.pluginEncryptionSecret | string | `""` | Required if using Valtimo/GZAC plugins: Plugin encryption secret. Must be exactly 16, 24 or 32 bytes. Or, if using existingSecret: `VALTIMO_PLUGIN_ENCRYPTIONSECRET` |
