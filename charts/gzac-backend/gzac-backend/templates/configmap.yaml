@@ -42,8 +42,8 @@ data:
       ""
     {{- end }}
   
-  VALTIMO_API_URL: {{- if .Values.gzac.apiUrl }}
-      {{ .Values.gzac.apiUrl | quote }}
+  VALTIMO_API_URL: {{- if .Values.settings.gzac.apiUrl }}
+      {{ .Values.settings.gzac.apiUrl | quote }}
     {{- else if and .Values.ingress.hosts (gt (len .Values.ingress.hosts) 0) }}
       {{ printf "https://%s/api/v1" (index .Values.ingress.hosts 0) | quote }}
     {{- else }}

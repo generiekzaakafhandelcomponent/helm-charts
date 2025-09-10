@@ -167,11 +167,6 @@ extraVolumeMounts: []
 # -- Refer to an existing secret to avoid managing secrets through Helm.
 existingSecret: null
 
-# -- Chart-specific settings used by templates (not application settings)
-gzac:
-  # -- Explicit API URL. When unset, it falls back to https://<ingress.hosts[0]>/api/v1
-  apiUrl:
-
 persistence:
   # -- Enable/disable persistent volumes for Gzac-backend
   enabled: false
@@ -255,6 +250,8 @@ settings:
     # -- Required if using Valtimo/GZAC plugins: Plugin encryption secret. Must be exactly 16, 24 or 32 bytes.
     # Or, if using existingSecret: `VALTIMO_PLUGIN_ENCRYPTIONSECRET`
     pluginEncryptionSecret: ""
+    # -- Explicit API URL. When unset, it falls back to https://<ingress.hosts[0]>/api/v1
+    apiUrl:
 
   operaton: 
     # -- Default Operaton admin user

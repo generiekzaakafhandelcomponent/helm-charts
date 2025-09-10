@@ -38,4 +38,4 @@ The generated list of published helm releases can be found [here](https://generi
 - Keycloak
   - If your Keycloak has `KC_HTTP_RELATIVE_PATH` configured to a non-default: Set `settings.keycloak.httpRelativePath`
 - API URL
-  - If the GZAC backend is served from a different domain than the frontend: Set `gzac.apiUrl` to the backend URL
+  - If the GZAC backend is served from a different domain than the frontend: Set `settings.gzac.apiUrl` to the backend URL
