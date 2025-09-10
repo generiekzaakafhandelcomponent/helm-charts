@@ -152,5 +152,5 @@ settings:
     realm: ""
     # -- The URL to redirect to after logout
     logoutRedirectURL: ""
-    # -- The URL to redirect to after a succesfull login
+    # -- The URL to redirect to after a successful login. Should end in /keycloak/callback.
     redirectURL: ""

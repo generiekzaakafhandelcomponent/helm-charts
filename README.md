@@ -2,14 +2,14 @@
 
 This repository contains the helm charts for the Valtimo GZAC application and a Keycloak-compatible version of Camunda Cockpit to run alongside it.
 
-We maintain three branches, `Release/1.x.x`, `Release/2.x.x` and `main` that are compatible with respectively Valtimo GZAC 10.x, 11.x and 12.2.x.
-Please pick the right chart version to ensure the proper configmap/envvars are setup in your cluster.
+For the GZAC backend, please pick the right chart version to ensure the proper configmap/envvars are setup in your cluster.
 
-| Chart Version | App version |
-| ------------- | ----------- |
-| `1.x.y`       | `>=10.0.0`  |
-| `2.x.y`       | `>=11.0.0`  |
-| `3.x.y`       | `>=12.2.0`  |
+| Chart Version | GZAC Backend version | Git Branch version |
+| ------------- | -------------------- | ------------------ |
+| `1.x.y`       | `>=10.0.0`           | `Release/1.x.x`    |
+| `2.x.y`       | `>=11.0.0`           | `Release/2.x.x`    |
+| `3.x.y`       | `>=12.0.0`           | `Release/3.x.x`    |
+| `4.x.y`       | `>=13.0.0`           | `main`             |
 
 Note that **the Helm Charts do not follow semver**.
 
@@ -22,3 +22,20 @@ Find the helm configuration values here:
 - [Camunda Cockpit](/charts/camunda-cockpit-keycloak/README.md)
 
 The generated list of published helm releases can be found [here](https://generiekzaakafhandelcomponent.github.io/helm-charts/index.yaml).
+
+## Migration guides
+
+### GZAC backend Helm chart version 3 to 4
+
+- Ingress
+  - `ingress.hosts` now expects only an array of hosts on which the backend should be exposed. The correct configuration of paths will be applied to each, and you do not have to specify this by yourself anymore.
+- Operaton (was Camunda)
+  - `settings.camunda.adminUserID` → `settings.operaton.adminUserID`
+  - `settings.camunda.adminUserPassword` → `settings.operaton.adminUserPassword`
+  - Update secret key `CAMUNDA_BPM_ADMINUSER_PASSWORD` to `OPERATON_BPM_ADMINUSER_PASSWORD`.
+- Subcharts
+  - Provision DB/Keycloak externally or install separate charts; remove old subchart values from overrides.
+- Keycloak
+  - If your Keycloak has `KC_HTTP_RELATIVE_PATH` configured to a non-default: Set `settings.keycloak.httpRelativePath`
+- API URL
+  - If the GZAC backend is served from a different domain than the frontend: Set `settings.gzac.apiUrl` to the backend URL

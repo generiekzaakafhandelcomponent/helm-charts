@@ -1,7 +1,13 @@
 {{- $keycloak_version := required "You must set settings.keycloak.version" .Values.settings.keycloak.version -}}
-{{- $jwks_uri_prefix := "" -}}
+
+{{- /* Older Keycloaks by default use the /auth prefix, newer Keycloaks do not. */ -}}
+{{- /* However, users may have manually configured this as well, so we leave the option open to configure it manually. */ -}}
+{{- $keycloak_http_relative_path := "" -}}
 {{- if (semverCompare "<17.0.0" (default "0" $keycloak_version)) -}}
-{{- $jwks_uri_prefix = "/auth" -}}
+{{- $keycloak_http_relative_path = "/auth" -}}
+{{- end -}}
+{{- if .Values.settings.keycloak.httpRelativePath }}
+{{- $keycloak_http_relative_path = .Values.settings.keycloak.httpRelativePath -}}
 {{- end -}}
 ---
 apiVersion: v1
@@ -19,12 +25,27 @@ data:
   KEYCLOAK_REALM: {{ .Values.settings.keycloak.realm | quote }}
   VALTIMO_OAUTH_PUBLIC_KEY: {{ required "You must set settings.keycloak.publicKey" .Values.settings.keycloak.publicKey | quote }}
   VALTIMO_DATABASE: {{ .Values.settings.gzac.databaseType | quote }}
-  CAMUNDA_BPM_ADMINUSER_ID: {{ .Values.settings.camunda.adminUserID | quote }}
-  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: {{ printf "%s%s/realms/%s/protocol/openid-connect/certs" $jwks_uri_prefix .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote }}
+  OPERATON_BPM_ADMINUSER_ID: {{ .Values.settings.operaton.adminUserID | quote }}
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: {{ printf "%s%s/realms/%s/protocol/openid-connect/certs" $keycloak_http_relative_path .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKJWT_CLIENTID: {{ .Values.settings.keycloak.clientRoleID | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKJWT_ISSUERURI: {{ printf "%s/realms/%s" .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ printf "%s/realms/%s" .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote  }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKJWT_ISSUERURI: {{ printf "%s%s/realms/%s" .Values.settings.keycloak.authServerURL $keycloak_http_relative_path .Values.settings.keycloak.realm | quote }}
+  SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ printf "%s%s/realms/%s" .Values.settings.keycloak.authServerURL $keycloak_http_relative_path .Values.settings.keycloak.realm | quote  }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTID: {{ .Values.settings.keycloak.clientID | quote }}
   VALTIMO_KEYCLOAK_CLIENT: {{ .Values.settings.keycloak.clientID | quote }}
   KEYCLOAK_RESOURCE: {{ .Values.settings.keycloak.clientID | quote }}
-  VALTIMO_APP_HOSTNAME: {{ .Values.settings.gzac.appHostName | quote }}
+  {{- /* Determine app hostname: explicit setting, else first ingress host */}}
+  VALTIMO_APP_HOSTNAME: {{- if .Values.settings.gzac.appHostName }}
+      {{ .Values.settings.gzac.appHostName | quote }}
+    {{- else if and .Values.ingress.hosts (gt (len .Values.ingress.hosts) 0) }}
+      {{ printf "https://%s" (index .Values.ingress.hosts 0) | quote }}
+    {{- else }}
+      ""
+    {{- end }}
+  
+  VALTIMO_API_URL: {{- if .Values.settings.gzac.apiUrl }}
+      {{ .Values.settings.gzac.apiUrl | quote }}
+    {{- else if and .Values.ingress.hosts (gt (len .Values.ingress.hosts) 0) }}
+      {{ printf "https://%s/api/v1" (index .Values.ingress.hosts 0) | quote }}
+    {{- else }}
+      ""
+    {{- end }}
