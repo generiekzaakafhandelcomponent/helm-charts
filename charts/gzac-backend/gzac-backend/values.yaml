@@ -259,3 +259,4 @@ settings:
     # -- Default Operaton admin password. 
     # Or, if using existingSecret: `OPERATON_BPM_ADMINUSER_PASSWORD`
     adminUserPassword: ""
+
