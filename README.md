@@ -22,3 +22,21 @@ Find the helm configuration values here:
 - [Camunda Cockpit](/charts/camunda-cockpit-keycloak/README.md)
 
 The generated list of published helm releases can be found [here](https://generiekzaakafhandelcomponent.github.io/helm-charts/index.yaml).
+
+## Migration guides
+
+### GZAC backend Helm chart version 3 to 4
+
+- Ingress
+  - Old: `ingress.hosts`
+  - New: Remove `ingress.hosts` completely. Set `ingress.host` (singular) to the GZAC backend hostname. Default Ingress rules are inferred from this.
+- Operaton (was Camunda)
+  - `settings.camunda.adminUserID` → `settings.operaton.adminUserID`
+  - `settings.camunda.adminUserPassword` → `settings.operaton.adminUserPassword`
+  - Update secret key `CAMUNDA_BPM_ADMINUSER_PASSWORD` to `OPERATON_BPM_ADMINUSER_PASSWORD`.
+- Subcharts
+  - Provision DB/Keycloak externally or install separate charts; remove old subchart values from overrides.
+- Keycloak
+  - If your Keycloak has `KC_HTTP_RELATIVE_PATH` configured to a non-default: Set `settings.keycloak.httpRelativePath`
+- API URL
+  - If the GZAC backend is served from a different domain than the frontend: Set `gzac.apiUrl` to the backend URL
