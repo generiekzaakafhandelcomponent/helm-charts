@@ -19,8 +19,6 @@ A Helm chart for Kubernetes
 | extraVolumeMounts | list | `[]` | Optionally specify extra list of additional volumeMounts |
 | extraVolumes | list | `[]` | Optionally specify extra list of additional volumes |
 | fullnameOverride | string | `""` | String to fully override gzac-backend.fullname |
-| gzac | object | `{"apiUrl":null}` | Chart-specific settings used by templates (not application settings) |
-| gzac.apiUrl | string | `nil` | Explicit API URL. When unset, it falls back to https://<ingress.hosts[0]>/api/v1 |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy for the image |
 | image.repository | string | `"ritense/gzac-backend"` | Domain of the image repository |
 | image.tag | string | `"12.2.1"` | Overrides the image tag whose default is the chart appVersion. |
@@ -62,6 +60,7 @@ A Helm chart for Kubernetes
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | If not set and create is true, a name is generated using the fullname template |
+| settings.gzac.apiUrl | string | `nil` | Explicit API URL. When unset, it falls back to https://<ingress.hosts[0]>/api/v1 |
 | settings.gzac.appHostName | string | `nil` | Defaults to https://<ingress.hosts[0]> |
 | settings.gzac.connectorEncryptionSecret | string | `""` | Encryption secret Or, if using existingSecret: `VALTIMO_CONNECTORENCRYPTION_SECRET` |
 | settings.gzac.databaseType | string | `"postgres"` | Type of database to use (can by either 'postgres' or 'mysql') |
