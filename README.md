@@ -2,14 +2,14 @@
 
 This repository contains the helm charts for the Valtimo GZAC application and a Keycloak-compatible version of Camunda Cockpit to run alongside it.
 
-We maintain three branches, `Release/1.x.x`, `Release/2.x.x` and `main` that are compatible with respectively Valtimo GZAC 10.x, 11.x and 12.2.x.
-Please pick the right chart version to ensure the proper configmap/envvars are setup in your cluster.
+For the GZAC backend, please pick the right chart version to ensure the proper configmap/envvars are setup in your cluster.
 
-| Chart Version | App version |
-| ------------- | ----------- |
-| `1.x.y`       | `>=10.0.0`  |
-| `2.x.y`       | `>=11.0.0`  |
-| `3.x.y`       | `>=12.2.0`  |
+| Chart Version | GZAC Backend version | Git Branch version |
+| ------------- | -------------------- | ------------------ |
+| `1.x.y`       | `>=10.0.0`           | `Release/1.x.x`    |
+| `2.x.y`       | `>=11.0.0`           | `Release/2.x.x`    |
+| `3.x.y`       | `>=12.0.0`           | `Release/3.x.x`    |
+| `4.x.y`       | `>=13.0.0`           | `main`             |
 
 Note that **the Helm Charts do not follow semver**.
 

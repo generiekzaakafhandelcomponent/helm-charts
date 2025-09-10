@@ -1,6 +1,6 @@
 apiVersion: v2
-appVersion: 0.1.0
+appVersion: 13.x.y
 description: A Helm chart for Kubernetes
 name: gzac-frontend
 type: application
-version: 0.1.14
+version: 0.1.15
