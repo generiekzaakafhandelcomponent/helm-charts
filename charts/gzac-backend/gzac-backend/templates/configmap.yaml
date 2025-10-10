@@ -26,7 +26,7 @@ data:
   VALTIMO_OAUTH_PUBLIC_KEY: {{ required "You must set settings.keycloak.publicKey" .Values.settings.keycloak.publicKey | quote }}
   VALTIMO_DATABASE: {{ .Values.settings.gzac.databaseType | quote }}
   OPERATON_BPM_ADMINUSER_ID: {{ .Values.settings.operaton.adminUserID | quote }}
-  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: {{ printf "%s%s/realms/%s/protocol/openid-connect/certs" $keycloak_http_relative_path .Values.settings.keycloak.authServerURL .Values.settings.keycloak.realm | quote }}
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: {{ printf "%s%s/realms/%s/protocol/openid-connect/certs" .Values.settings.keycloak.authServerURL $keycloak_http_relative_path .Values.settings.keycloak.realm | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKJWT_CLIENTID: {{ .Values.settings.keycloak.clientRoleID | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKJWT_ISSUERURI: {{ printf "%s%s/realms/%s" .Values.settings.keycloak.authServerURL $keycloak_http_relative_path .Values.settings.keycloak.realm | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAKAPI_ISSUERURI: {{ printf "%s%s/realms/%s" .Values.settings.keycloak.authServerURL $keycloak_http_relative_path .Values.settings.keycloak.realm | quote  }}
