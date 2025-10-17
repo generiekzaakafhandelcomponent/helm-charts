@@ -43,7 +43,13 @@ data:
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_PROVIDER: {{ .provider | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTID: {{ .clientId | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_AUTHORIZATIONGRANTTYPE: {{ .authorizationGrantType | quote }}
-  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_REDIRECTURI: {{ .redirectUri | quote }}
+  {{- $redirectHost := "" -}}
+  {{- with $.Values.ingress }}
+    {{- if gt (len .hosts) 0 }}
+      {{- $redirectHost = printf "%v" (index (index .hosts 0) "host") -}}
+    {{- end }}
+  {{- end }}
+  SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_REDIRECTURI: {{ printf "https://%s%s" $redirectHost .redirectUri | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_SCOPE: {{ .scope | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: {{ .providerIssuerUri | quote }}
   SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_AUTHORIZATIONURI: {{ print .providerIssuerUri "/protocol/openid-connect/auth" | quote }}
