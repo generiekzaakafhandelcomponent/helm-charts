@@ -253,6 +253,11 @@ settings:
     # -- Explicit API URL. When unset, it falls back to https://<ingress.hosts[0]>/api/v1
     apiUrl:
 
+    # -- Feature flags
+    features:
+      drafts:
+        enabled: true
+
   operaton: 
     # -- Default Operaton admin user
     adminUserID: "admin"
