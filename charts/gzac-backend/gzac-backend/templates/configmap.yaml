@@ -49,3 +49,5 @@ data:
     {{- else }}
       ""
     {{- end }}
+  
+  VALTIMO_DRAFT_ENABLED: {{ .Values.settings.gzac.features.drafts.enabled | quote }}
