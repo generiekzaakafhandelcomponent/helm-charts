@@ -1,6 +1,6 @@
 # gzac-backend
 
-![Version: 4.0.2](https://img.shields.io/badge/Version-4.0.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 13.1.x](https://img.shields.io/badge/AppVersion-13.1.x-informational?style=flat-square)
+![Version: 4.1.0](https://img.shields.io/badge/Version-4.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 13.1.x](https://img.shields.io/badge/AppVersion-13.1.x-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -64,6 +64,7 @@ A Helm chart for Kubernetes
 | settings.gzac.appHostName | string | `nil` | Defaults to https://<ingress.hosts[0]> |
 | settings.gzac.connectorEncryptionSecret | string | `""` | Encryption secret Or, if using existingSecret: `VALTIMO_CONNECTORENCRYPTION_SECRET` |
 | settings.gzac.databaseType | string | `"postgres"` | Type of database to use (can by either 'postgres' or 'mysql') |
+| settings.gzac.features | object | `{"drafts":{"enabled":true}}` | Feature flags |
 | settings.gzac.pluginEncryptionSecret | string | `""` | Required if using Valtimo/GZAC plugins: Plugin encryption secret. Must be exactly 16, 24 or 32 bytes. Or, if using existingSecret: `VALTIMO_PLUGIN_ENCRYPTIONSECRET` |
 | settings.gzac.serverPort | int | `8080` | The port on which gzac-backend is listening |
 | settings.keycloak.authServerURL | string | `nil` | Required: Plain URL of Keycloak |
