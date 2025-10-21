@@ -255,6 +255,7 @@ settings:
 
     # -- Feature flags
     features:
+      # Valtimo Drafts feature, see: https://docs.valtimo.nl/release-notes/13.x.x/13.0.0#draft-versions
       drafts:
         enabled: true
 
