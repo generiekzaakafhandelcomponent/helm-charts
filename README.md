@@ -4,12 +4,12 @@ This repository contains the helm charts for the Valtimo GZAC application and a 
 
 For the GZAC backend, please pick the right chart version to ensure the proper configmap/envvars are setup in your cluster.
 
-| Chart Version | GZAC Backend version | Git Branch version |
+| Chart Version | GZAC Backend major version | Git Branch version |
 | ------------- | -------------------- | ------------------ |
-| `1.x.y`       | `>=10.0.0`           | `Release/1.x.x`    |
-| `2.x.y`       | `>=11.0.0`           | `Release/2.x.x`    |
-| `3.x.y`       | `>=12.0.0`           | `Release/3.x.x`    |
-| `4.x.y`       | `>=13.0.0`           | `main`             |
+| `1.x.y`       | `10`           | `Release/1.x.x`    |
+| `2.x.y`       | `11`           | `Release/2.x.x`    |
+| `3.x.y`       | `12`           | `Release/3.x.x`    |
+| `4.x.y`       | `13`           | `main`             |
 
 Note that **the Helm Charts do not follow semver**.
 
