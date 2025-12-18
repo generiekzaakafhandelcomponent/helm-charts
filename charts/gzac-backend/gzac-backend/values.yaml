@@ -76,6 +76,8 @@ ingress:
   # -- Hosts at which Valtimo/GZAC can be reached.
   #    Note: several URLs are inferred from the FIRST entry in this list.
   hosts: ["gzac.example.com"]
+  # -- Additional ingress rules to append as-is to `spec.rules`
+  extraHosts: []
   # -- TLS configuration
   tls: []
 
@@ -265,4 +267,3 @@ settings:
     # -- Default Operaton admin password. 
     # Or, if using existingSecret: `OPERATON_BPM_ADMINUSER_PASSWORD`
     adminUserPassword: ""
-
