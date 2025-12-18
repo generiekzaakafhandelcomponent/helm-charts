@@ -25,8 +25,8 @@ A Helm chart for Kubernetes
 | imagePullSecrets | list | `[]` | Image pull secrets |
 | ingress.annotations | object | `{}` | Ingress annotations |
 | ingress.enabled | bool | `false` | Expose the gzac-backend UI through an ingress |
-| ingress.hosts | list | `["gzac.example.com"]` | Hosts at which Valtimo/GZAC can be reached.    Note: several URLs are inferred from the FIRST entry in this list. |
 | ingress.extraHosts | list | `[]` | Additional ingress rules to append as-is to `spec.rules` |
+| ingress.hosts | list | `["gzac.example.com"]` | Hosts at which Valtimo/GZAC can be reached.    Note: several URLs are inferred from the FIRST entry in this list. |
 | ingress.ingressClassName | string | `""` | Ingress Class which will be used to implement the Ingress |
 | ingress.tls | list | `[]` | TLS configuration |
 | livenessProbe.failureThreshold | int | `3` | Failure threshold for livenessProbe |
