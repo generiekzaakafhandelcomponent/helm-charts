@@ -85,4 +85,7 @@ spec:
               servicePort: {{ $svcPort }}
               {{- end }}
       {{- end }}
+    {{- with .Values.ingress.extraHosts }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- end }}

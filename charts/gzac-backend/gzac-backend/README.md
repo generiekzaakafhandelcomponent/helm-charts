@@ -1,6 +1,6 @@
 # gzac-backend
 
-![Version: 4.1.0](https://img.shields.io/badge/Version-4.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 13.1.x](https://img.shields.io/badge/AppVersion-13.1.x-informational?style=flat-square)
+![Version: 4.1.1](https://img.shields.io/badge/Version-4.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 13.8.x](https://img.shields.io/badge/AppVersion-13.8.x-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -25,6 +25,7 @@ A Helm chart for Kubernetes
 | imagePullSecrets | list | `[]` | Image pull secrets |
 | ingress.annotations | object | `{}` | Ingress annotations |
 | ingress.enabled | bool | `false` | Expose the gzac-backend UI through an ingress |
+| ingress.extraHosts | list | `[]` | Additional ingress rules to append as-is to `spec.rules` |
 | ingress.hosts | list | `["gzac.example.com"]` | Hosts at which Valtimo/GZAC can be reached.    Note: several URLs are inferred from the FIRST entry in this list. |
 | ingress.ingressClassName | string | `""` | Ingress Class which will be used to implement the Ingress |
 | ingress.tls | list | `[]` | TLS configuration |
