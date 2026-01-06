@@ -137,6 +137,21 @@ tolerations: []
 # -- Affinity for gzac-frontend pods assignment
 affinity: {}
 
+# -- Optionally specify additional volumes
+extraVolumes: []
+# e.g:
+# extraVolumes:
+#   - name: verify-certs
+#     configMap:
+#       name: verify-certs
+
+# -- Optionally specify additional volumeMounts
+extraVolumeMounts: []
+# e.g:
+# extraVolumeMounts:
+#  - name: verify-certs
+#    mountPath: /etc/ssl/certs/extra-certs/
+
 settings: 
   # -- URL where the gzac-API is located
   apiURL: ""

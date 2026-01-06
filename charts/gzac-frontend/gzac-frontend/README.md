@@ -9,6 +9,8 @@ A Helm chart for Kubernetes
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` | Affinity for gzac-frontend pods assignment |
+| extraVolumes | list | `[]` | Optionally specify extra list of additional volumes |
+| extraVolumeMounts | list | `[]` | Optionally specify extra list of additional volumeMounts |
 | autoscaling.enabled | bool | `false` | Enable/disable autoscaling for the gzac-frontend deployment |
 | autoscaling.maxReplicas | int | `100` | Maximum replicas for the gzac-frontend deployment |
 | autoscaling.minReplicas | int | `1` | Minimum replicas for the gzac-frontend deployment |
