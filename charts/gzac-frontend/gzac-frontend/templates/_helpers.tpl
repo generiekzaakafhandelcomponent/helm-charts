@@ -61,7 +61,6 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{/* vim: set filetype=mustache: */}}
 {{/*
 Renders a value that contains template.
 Usage:
