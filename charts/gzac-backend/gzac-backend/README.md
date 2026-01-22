@@ -78,7 +78,7 @@ A Helm chart for Kubernetes
 | settings.keycloak.version | string | `""` | Required: Keycloak version you are running against |
 | settings.operaton.adminUserID | string | `"admin"` | Default Operaton admin user |
 | settings.operaton.adminUserPassword | string | `""` | Default Operaton admin password. Or, if using existingSecret: `OPERATON_BPM_ADMINUSER_PASSWORD` |
-| settings.operaton.incidentAlertLog | object | `{"enabled":true,"messageTemplate":null}` | See: https://docs.valtimo.nl/features/process/process/incident-error-logging |
+| settings.operaton.incidentAlertLog | object | `{"enabled":true,"messageTemplate":"A process has been placed in incident status after exhausting all retries. Process instance ID: {processInstanceId}, incident ID {incidentId}"}` | See: https://docs.valtimo.nl/features/process/process/incident-error-logging |
 | settings.spring.actuator.password | string | `""` | Password to access the Spring actuator endpoint. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
 | settings.spring.actuator.username | string | `"admin"` | Username to access the Spring actuator endpoint |
 | settings.spring.datasource.password | string | `""` | Password for the database. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
