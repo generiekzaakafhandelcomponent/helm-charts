@@ -266,7 +266,7 @@ settings:
     # Or, if using existingSecret: `OPERATON_BPM_ADMINUSER_PASSWORD`
     adminUserPassword: ""
 
-    # -- Alert logging for when application-level process-related incidents occur.
+    # -- Available since GZAC v13.12: Alert logging for when application-level process-related incidents occur.
     # -- See: https://docs.valtimo.nl/features/process/process/incident-error-logging
     incidentAlertLog:
       enabled: true
