@@ -270,4 +270,4 @@ settings:
     # -- See: https://docs.valtimo.nl/features/process/process/incident-error-logging
     incidentAlertLog:
       enabled: true
-      messageTemplate:
+      messageTemplate: "A process has been placed in incident status after exhausting all retries. Process instance ID: {processInstanceId}, incident ID {incidentId}"
