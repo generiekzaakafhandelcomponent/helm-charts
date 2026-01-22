@@ -1,6 +1,6 @@
 # gzac-backend
 
-![Version: 4.1.1](https://img.shields.io/badge/Version-4.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 13.8.x](https://img.shields.io/badge/AppVersion-13.8.x-informational?style=flat-square)
+![Version: 4.2.0](https://img.shields.io/badge/Version-4.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 13.12.x](https://img.shields.io/badge/AppVersion-13.12.x-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -73,11 +73,12 @@ A Helm chart for Kubernetes
 | settings.keycloak.clientRoleID | string | `"valtimo-console"` | Client-ID for using Valtimo with Keycloak client roles. More info: https://docs.valtimo.nl/running-valtimo/application-configuration/configuring-keycloak#client-roles Set to `null` to disable client roles entirely and use realm roles instead. |
 | settings.keycloak.clientSecret | string | `""` | Client-Secret to connect with Keycloak. Or, if using existingSecret: `KEYCLOAK_CREDENTIALS_SECRET` and `SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTSECRET` (must set both) |
 | settings.keycloak.httpRelativePath | string | `nil` | Optional: Override Keycloak's HTTP relative path. Leave empty for default.    For Keycloak < 17, default is "/auth"; for >= 17, default is "". |
-| settings.keycloak.publicKey | string | `""` | Required: Keycloak's Public Key used to verify signature of JWTs. In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'.  Use the public key with Use: 'SIG' and Provider: 'rsa-generated'. |
+| settings.keycloak.publicKey | string | `""` | Required: Keycloak's Public Key used to verify signature of JWTs. In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'. Use the public key with Use: 'SIG' and Provider: 'rsa-generated'. |
 | settings.keycloak.realm | string | `nil` | Required: Keycloak realm |
 | settings.keycloak.version | string | `""` | Required: Keycloak version you are running against |
 | settings.operaton.adminUserID | string | `"admin"` | Default Operaton admin user |
-| settings.operaton.adminUserPassword | string | `""` | Default Operaton admin password.  Or, if using existingSecret: `OPERATON_BPM_ADMINUSER_PASSWORD` |
+| settings.operaton.adminUserPassword | string | `""` | Default Operaton admin password. Or, if using existingSecret: `OPERATON_BPM_ADMINUSER_PASSWORD` |
+| settings.operaton.incidentAlertLog | object | `{"enabled":true,"messageTemplate":null}` | See: https://docs.valtimo.nl/features/process/process/incident-error-logging |
 | settings.spring.actuator.password | string | `""` | Password to access the Spring actuator endpoint. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
 | settings.spring.actuator.username | string | `"admin"` | Username to access the Spring actuator endpoint |
 | settings.spring.datasource.password | string | `""` | Password for the database. Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD` |
