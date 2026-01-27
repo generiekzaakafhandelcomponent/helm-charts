@@ -51,3 +51,5 @@ data:
     {{- end }}
   
   VALTIMO_DRAFT_ENABLED: {{ .Values.settings.gzac.features.drafts.enabled | quote }}
+  OPERATON_INCIDENT_ALERTLOG_ENABLED: {{ .Values.settings.operaton.incidentAlertLog.enabled | quote }}
+  OPERATON_INCIDENT_ALERTLOG_MESSAGETEMPLATE: {{ .Values.settings.operaton.incidentAlertLog.messageTemplate | quote }}

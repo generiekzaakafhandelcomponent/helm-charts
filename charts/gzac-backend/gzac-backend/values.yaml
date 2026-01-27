@@ -42,15 +42,15 @@ podAnnotations: {}
 # -- Labels for gzac-backend pods
 podLabels: {}
 
-podSecurityContext: 
+podSecurityContext:
   # -- Set gzac-backend's pod security fsGroup
   fsGroup: 1000
 
-securityContext: 
+securityContext:
   capabilities:
     # -- gzac-backend's container security context capabilities to be dropped
     drop:
-    - ALL
+      - ALL
   # -- gzac-backend's container security context readOnlyRootFilesystem
   readOnlyRootFilesystem: false
   # -- Run gzac-backend containers as non-root
@@ -189,29 +189,28 @@ persistence:
   mountPath: /tmp
 
 settings:
-
-  spring: 
+  spring:
     profiles:
       # -- Activated Spring profiles
       active: "cloud"
-    actuator: 
+    actuator:
       # -- Username to access the Spring actuator endpoint
       username: "admin"
       # -- Password to access the Spring actuator endpoint.
       # Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD`
       password: ""
-    datasource: 
+    datasource:
       # -- URL for the database
-      url: 
+      url:
       # -- Username for the database
-      username: 
+      username:
       # -- Password for the database.
       # Or, if using existingSecret: `SPRINGACTUATOR_PASSWORD`
       password: ""
-    
-  keycloak: 
+
+  keycloak:
     # -- Required: Plain URL of Keycloak
-    authServerURL: 
+    authServerURL:
     # -- Required: Keycloak realm
     realm:
     # -- Client-ID to connect with Keycloak
@@ -226,24 +225,23 @@ settings:
     clientSecret: ""
 
     # -- Required: Keycloak's Public Key used to verify signature of JWTs.
-    # In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'. 
+    # In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'.
     # Use the public key with Use: 'SIG' and Provider: 'rsa-generated'.
     publicKey: ""
 
     # -- Required: Keycloak version you are running against
     version: ""
-  
+
     # -- Optional: Override Keycloak's HTTP relative path. Leave empty for default.
     #    For Keycloak < 17, default is "/auth"; for >= 17, default is "".
     httpRelativePath:
-
 
   gzac:
     # -- Type of database to use (can by either 'postgres' or 'mysql')
     databaseType: "postgres"
     # -- Optional: The hostname which exposes gzac-backend
     # -- Defaults to https://<ingress.hosts[0]>
-    appHostName: 
+    appHostName:
     # -- The port on which gzac-backend is listening
     serverPort: 8080
     # -- Encryption secret
@@ -261,9 +259,15 @@ settings:
       drafts:
         enabled: true
 
-  operaton: 
+  operaton:
     # -- Default Operaton admin user
     adminUserID: "admin"
-    # -- Default Operaton admin password. 
+    # -- Default Operaton admin password.
     # Or, if using existingSecret: `OPERATON_BPM_ADMINUSER_PASSWORD`
     adminUserPassword: ""
+
+    # -- Available since GZAC v13.12: Alert logging for when application-level process-related incidents occur.
+    # -- See: https://docs.valtimo.nl/features/process/process/incident-error-logging
+    incidentAlertLog:
+      enabled: true
+      messageTemplate: "A process has been placed in incident status after exhausting all retries. Process instance ID: {processInstanceId}, incident ID {incidentId}"
