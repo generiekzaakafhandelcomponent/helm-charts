@@ -59,6 +59,7 @@ A Helm chart for Kubernetes
 | service.port | int | `80` | gzac-backend service port |
 | service.type | string | `"ClusterIP"` | gzac-backend service type |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
+| serviceAccount.automountServiceAccountToken | bool | `false` | By default, not necessary for Valtimo/GZAC |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | If not set and create is true, a name is generated using the fullname template |
 | settings.gzac.apiUrl | string | `nil` | Explicit API URL. When unset, it falls back to https://<ingress.hosts[0]>/api/v1 |
