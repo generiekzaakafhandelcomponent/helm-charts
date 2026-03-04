@@ -1,0 +1,65 @@
+resources:
+  requests:
+    cpu: 1
+  limits:
+    memory: 2Gi
+tags:
+  postgresql: false
+  mysql: false
+  keycloak: false
+replicaCount: 1
+cache: tcp://redis.example.svc.cluster.local:6379
+image:
+  repository: "ghcr.io/example-org/gzac-backend" # {"$imagepolicy": "debug:valtimo-backend:name"}
+  pullPolicy: IfNotPresent
+  tag: feature-debug-build # {"$imagepolicy": "debug:valtimo-backend:tag"}
+imagePullSecrets:
+  - name: example-regcred
+ingress:
+  enabled: true
+  ingressClassName: "alb"
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/group.name: "nonprod"
+    alb.ingress.kubernetes.io/security-groups: sg-0123456789abcdef0
+    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"
+  host: "debug.example.gzac.test"
+serviceAccount:
+  create: true
+  annotations: {eks.amazonaws.com/role-arn: 'arn:aws:iam::123456789012:role/example-backend-role'}
+  name: "example-backend-sa"
+existingSecret: "example-backend-secrets"
+extraVolumeMounts:
+  - name: secrets-store-inline
+    mountPath: "/var/run/secrets/secrets-store"
+    readOnly: true
+extraVolumes:
+  - name: secrets-store-inline
+    csi:
+      driver: secrets-store.csi.k8s.io
+      readOnly: true
+      volumeAttributes:
+        secretProviderClass: "example-backend-secrets-provider"
+settings:
+  spring:
+    profiles:
+      active: "dev"
+    actuator:
+      username: "admin"
+    datasource:
+      url: jdbc:postgresql://example-db.cluster.local:5432/valtimo-debug
+      username: valtimo-debug
+  keycloak:
+    version: 26.2.5
+    authServerURL: https://keycloak.example.test
+    realm: valtimo-test
+    clientID: valtimo-user-m2m-client
+    publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1eMsZOjMGY0LjY209kXzkSV9iwXe1e4lLpO+SjAvfkO0OoOWthTWDgd2OtTfmggi5lLKpWsPnlyw0CXlnhUrh6QUm1TiDCLRIApPQpwrEpQ74pLkDzgfo4A9egCXwmpk9iZXQAh1MCttYQXB99BjZyHgPvigUYyfqjehG4AJKvK3xG7fVHl1PPxk//p/DZq5gFVrWNseoQEC6ghtmGZd1SoC/k5DTjR+b5P94qSBFgh5nH80o04G6BmcShPgpL5phVbukM0UpGdtDyHvtOe16BYY1QiBRH02BZia5bzcE0ca2udvE3vZHcbbDGysxl8XHC62IJY9jo7OeHFGEzAdRwIDAQAB
+  valtimo:
+    databaseType: "postgres"
+    serverPort: 8080
+  operaton:
+    adminUserID: "admin"
