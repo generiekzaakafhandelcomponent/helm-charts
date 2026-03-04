@@ -1,6 +1,6 @@
 # gzac-frontend
 
-![Version: 0.1.16](https://img.shields.io/badge/Version-0.1.16-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 13.x.y](https://img.shields.io/badge/AppVersion-13.x.y-informational?style=flat-square)
+![Version: 0.1.17](https://img.shields.io/badge/Version-0.1.17-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 13.x.y](https://img.shields.io/badge/AppVersion-13.x.y-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -52,6 +52,7 @@ A Helm chart for Kubernetes
 | service.port | int | `80` | gzac-frontend service port |
 | service.type | string | `"ClusterIP"` | gzac-frontend service type |
 | serviceAccount.annotations | object | `{}` |  |
+| serviceAccount.automountServiceAccountToken | bool | `false` | By default, not necessary for Valtimo/GZAC |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |
 | settings.apiURL | string | `""` | URL where the gzac-API is located |
