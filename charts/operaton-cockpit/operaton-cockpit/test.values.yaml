@@ -1,0 +1,15 @@
+---
+image:
+  tag: main-202508061324-bbf8a692
+
+settings:
+  spring:
+    datasource:
+      url: https://url.postgres.test
+      username: postgres
+      password: postgres
+    keycloak:
+      clientSecret: test
+
+  plugin:
+    keycloakAdminUrl: http://localhost/auth/admin/realms/test

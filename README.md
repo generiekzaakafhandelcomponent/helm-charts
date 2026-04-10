@@ -1,6 +1,6 @@
 # Valtimo GZAC Helm charts
 
-This repository contains the helm charts for the Valtimo GZAC application and a Keycloak-compatible version of Camunda Cockpit to run alongside it.
+This repository contains the helm charts for the Valtimo GZAC application and a Keycloak-compatible version of Camunda Cockpit and Operaton Cockpit to run alongside it.
 
 For the GZAC backend, please pick the right chart version to ensure the proper configmap/envvars are setup in your cluster.
 
@@ -19,7 +19,8 @@ Find the helm configuration values here:
 
 - [GZAC Backend](/charts/gzac-backend/gzac-backend/README.md)
 - [GZAC Frontend](/charts/gzac-frontend/gzac-frontend/README.md)
-- [Camunda Cockpit](/charts/camunda-cockpit-keycloak/README.md)
+- [Camunda Cockpit](/charts/camunda-cockpit-keycloak/camunda-cockpit-keycloak/README.md)
+- [Operaton Cockpit](/charts/operaton-cockpit/operaton-cockpit/README.md)
 
 The generated list of published helm releases can be found [here](https://generiekzaakafhandelcomponent.github.io/helm-charts/index.yaml).
 
