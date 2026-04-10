@@ -1,0 +1,8 @@
+---
+apiVersion: v2
+appVersion: v0.1.0
+description: |
+  A Helm chart for deploying the Operaton Cockpit Keycloak application.
+name: operaton-cockpit
+type: application
+version: 0.2.0
