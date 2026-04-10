@@ -1107,4 +1107,15 @@ entries:
     urls:
     - https://github.com/generiekzaakafhandelcomponent/helm-charts/releases/download/gzac-frontend-0.1.0/gzac-frontend-0.1.0.tgz
     version: 0.1.0
-generated: "2026-03-04T08:37:54.637424913Z"
+  operaton-cockpit:
+  - apiVersion: v2
+    appVersion: v0.1.0
+    created: "2026-04-10T12:15:05.370950576Z"
+    description: 'A Helm chart for deploying the Operaton Cockpit Keycloak application. '
+    digest: f647a59eb519234970da90b0709c83aca55c18d391f261b1825ade4a60997759
+    name: operaton-cockpit
+    type: application
+    urls:
+    - https://github.com/generiekzaakafhandelcomponent/helm-charts/releases/download/operaton-cockpit-0.2.0/operaton-cockpit-0.2.0.tgz
+    version: 0.2.0
+generated: "2026-04-10T12:15:05.371036237Z"
