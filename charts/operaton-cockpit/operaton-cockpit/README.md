@@ -2,7 +2,7 @@
 
 ![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
-A Helm chart for deploying the Operaton Cockpit application.
+A Helm chart for deploying the Operaton Cockpit Keycloak application.
 
 ## Values
 
@@ -47,12 +47,6 @@ A Helm chart for deploying the Operaton Cockpit application.
 | serviceAccount.automountServiceAccountToken | bool | `false` | Whether or not the service account token should be mounted into the pod.  Mounting is only required when Kubernetes API access is needed. |
 | serviceAccount.create | bool | `true` | By default, the service account is created to avoid security risks when using the 'default' Kubernetes service account. |
 | serviceAccount.name | string | `""` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template |
-| settings.operaton.authorization.enabled | bool | `true` |  |
-| settings.operaton.database.type | string | `"postgres"` |  |
-| settings.operaton.historyLevel | string | `"audit"` |  |
-| settings.operaton.jobExecution.deploymentAware | bool | `true` |  |
-| settings.operaton.jobExecution.enabled | bool | `false` |  |
-| settings.operaton.webapp.applicationPath | string | `nil` |  |
 | settings.logLevelSpringSecurity | string | `"DEBUG"` |  |
 | settings.management.endpoint.health.showDetails | string | `"when_authorized"` |  |
 | settings.management.endpoints.jmx.exposure.exclude | string | `"*"` |  |
@@ -63,6 +57,12 @@ A Helm chart for deploying the Operaton Cockpit application.
 | settings.management.info.env.enabled | bool | `true` |  |
 | settings.management.info.git.enabled | bool | `true` |  |
 | settings.management.info.git.mode | string | `"simple"` |  |
+| settings.operaton.authorization.enabled | bool | `true` |  |
+| settings.operaton.database.type | string | `"postgres"` |  |
+| settings.operaton.historyLevel | string | `"audit"` |  |
+| settings.operaton.jobExecution.deploymentAware | bool | `true` |  |
+| settings.operaton.jobExecution.enabled | bool | `false` |  |
+| settings.operaton.webapp.applicationPath | string | `nil` |  |
 | settings.plugin.administratorGroupName | string | `"operaton-admin"` |  |
 | settings.plugin.disableSSLCertificateValidation | bool | `true` |  |
 | settings.plugin.enforceSubgroupsInGroupQuery | bool | `true` |  |
