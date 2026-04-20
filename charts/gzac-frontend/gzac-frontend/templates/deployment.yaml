@@ -45,6 +45,10 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "gzac-frontend.fullname" . }}
+          {{- if .Values.extraEnvVars }}
+          env:
+            {{- include "gzac-frontend.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 8080
