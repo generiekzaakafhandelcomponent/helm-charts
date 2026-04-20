@@ -1,6 +1,6 @@
 # gzac-frontend
 
-![Version: 0.1.17](https://img.shields.io/badge/Version-0.1.17-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 13.x.y](https://img.shields.io/badge/AppVersion-13.x.y-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 13.x.y](https://img.shields.io/badge/AppVersion-13.x.y-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -14,6 +14,7 @@ A Helm chart for Kubernetes
 | autoscaling.minReplicas | int | `1` | Minimum replicas for the gzac-frontend deployment |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` | gzac-frontend Deployment autoscaling target CPU percentage |
 | autoscaling.targetMemoryUtilizationPercentage | int | `80` | gzac-frontend Deployment autoscaling target Mem utilization percentage |
+| extraEnvVars | list | `[]` | Array with extra environment variables to add |
 | extraVolumeMounts | list | `[]` | Optionally specify additional volumeMounts |
 | extraVolumes | list | `[]` | Optionally specify additional volumes |
 | fullnameOverride | string | `""` | String to fully override valitmo-frontend.fullname |
