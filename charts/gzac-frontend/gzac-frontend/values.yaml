@@ -140,6 +140,13 @@ tolerations: []
 # -- Affinity for gzac-frontend pods assignment
 affinity: {}
 
+# -- Array with extra environment variables to add
+extraEnvVars: []
+# e.g:
+# extraEnvVars:
+#   - name: FOO
+#     value: "bar"
+
 # -- Optionally specify additional volumes
 extraVolumes: []
 # e.g:
