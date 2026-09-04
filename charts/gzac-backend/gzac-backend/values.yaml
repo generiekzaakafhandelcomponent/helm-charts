@@ -227,11 +227,6 @@ settings:
     # Or, if using existingSecret: `KEYCLOAK_CREDENTIALS_SECRET` and `SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAKAPI_CLIENTSECRET` (must set both)
     clientSecret: ""
 
-    # -- Required: Keycloak's Public Key used to verify signature of JWTs.
-    # In Keycloak, this can be found under (in the realm you're using): 'Realm settings' -> 'Keys'.
-    # Use the public key with Use: 'SIG' and Provider: 'rsa-generated'.
-    publicKey: ""
-
     # -- Required: Keycloak version you are running against
     version: ""
 

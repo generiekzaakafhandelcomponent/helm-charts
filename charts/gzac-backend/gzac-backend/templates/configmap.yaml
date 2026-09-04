@@ -23,7 +23,6 @@ data:
   SPRING_DATASOURCE_USERNAME: {{ .Values.settings.spring.datasource.username | quote }}
   KEYCLOAK_AUTH_SERVER_URL: {{ print (required "You must set settings.keycloak.authServerURL" .Values.settings.keycloak.authServerURL) $keycloak_http_relative_path | quote }}
   KEYCLOAK_REALM: {{ .Values.settings.keycloak.realm | quote }}
-  VALTIMO_OAUTH_PUBLIC_KEY: {{ required "You must set settings.keycloak.publicKey" .Values.settings.keycloak.publicKey | quote }}
   VALTIMO_DATABASE: {{ .Values.settings.gzac.databaseType | quote }}
   OPERATON_BPM_ADMINUSER_ID: {{ .Values.settings.operaton.adminUserID | quote }}
   SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI: {{ printf "%s%s/realms/%s/protocol/openid-connect/certs" .Values.settings.keycloak.authServerURL $keycloak_http_relative_path .Values.settings.keycloak.realm | quote }}
