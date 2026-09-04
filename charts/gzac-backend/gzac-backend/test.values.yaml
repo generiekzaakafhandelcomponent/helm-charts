@@ -57,7 +57,6 @@ settings:
     authServerURL: https://keycloak.example.test
     realm: valtimo-test
     clientID: valtimo-user-m2m-client
-    publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1eMsZOjMGY0LjY209kXzkSV9iwXe1e4lLpO+SjAvfkO0OoOWthTWDgd2OtTfmggi5lLKpWsPnlyw0CXlnhUrh6QUm1TiDCLRIApPQpwrEpQ74pLkDzgfo4A9egCXwmpk9iZXQAh1MCttYQXB99BjZyHgPvigUYyfqjehG4AJKvK3xG7fVHl1PPxk//p/DZq5gFVrWNseoQEC6ghtmGZd1SoC/k5DTjR+b5P94qSBFgh5nH80o04G6BmcShPgpL5phVbukM0UpGdtDyHvtOe16BYY1QiBRH02BZia5bzcE0ca2udvE3vZHcbbDGysxl8XHC62IJY9jo7OeHFGEzAdRwIDAQAB
   valtimo:
     databaseType: "postgres"
     serverPort: 8080
