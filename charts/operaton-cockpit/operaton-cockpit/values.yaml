@@ -94,8 +94,8 @@ startupProbe:
 resources:
   # -- Limits are set to avoid resource based denial of service by default, adjust accordingly.
   limits:
-   cpu: 250m
-   memory: 512Mi
+    cpu: 1000m
+    memory: 1024Mi
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
