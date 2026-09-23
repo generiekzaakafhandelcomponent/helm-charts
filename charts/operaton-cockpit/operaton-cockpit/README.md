@@ -1,6 +1,6 @@
 # operaton-cockpit
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 A Helm chart for deploying the Operaton Cockpit Keycloak application.
 
@@ -39,7 +39,7 @@ A Helm chart for deploying the Operaton Cockpit Keycloak application.
 | readinessProbe.successThreshold | int | `1` |  |
 | readinessProbe.timeoutSeconds | int | `1` |  |
 | replicaCount | int | `1` | Number of replicas, only in use if autoscaling is disabled. |
-| resources.limits | object | `{"cpu":"250m","memory":"512Mi"}` | Limits are set to avoid resource based denial of service by default, adjust accordingly. |
+| resources.limits | object | `{"cpu":"1000m","memory":"1024Mi"}` | Limits are set to avoid resource based denial of service by default, adjust accordingly. |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsNonRoot":true,"seccompProfile":{"type":"RuntimeDefault"}}` | An intentional strict default container context. Adjust accordingly. |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
