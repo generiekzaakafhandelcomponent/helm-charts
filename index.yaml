@@ -1130,6 +1130,16 @@ entries:
   operaton-cockpit:
   - apiVersion: v2
     appVersion: v0.1.0
+    created: "2026-09-23T12:15:11.003797026Z"
+    description: 'A Helm chart for deploying the Operaton Cockpit Keycloak application. '
+    digest: 273ab9caa5f7a27d7245bebbfd71f38d4bb8c78f3d46f24a2e3b23dd7855e4db
+    name: operaton-cockpit
+    type: application
+    urls:
+    - https://github.com/generiekzaakafhandelcomponent/helm-charts/releases/download/operaton-cockpit-0.2.1/operaton-cockpit-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: v0.1.0
     created: "2026-04-10T12:15:05.370950576Z"
     description: 'A Helm chart for deploying the Operaton Cockpit Keycloak application. '
     digest: f647a59eb519234970da90b0709c83aca55c18d391f261b1825ade4a60997759
@@ -1138,4 +1148,4 @@ entries:
     urls:
     - https://github.com/generiekzaakafhandelcomponent/helm-charts/releases/download/operaton-cockpit-0.2.0/operaton-cockpit-0.2.0.tgz
     version: 0.2.0
-generated: "2026-09-04T12:56:20.032245084Z"
+generated: "2026-09-23T12:15:11.003911191Z"
