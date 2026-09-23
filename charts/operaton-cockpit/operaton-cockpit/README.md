@@ -39,7 +39,7 @@ A Helm chart for deploying the Operaton Cockpit Keycloak application.
 | readinessProbe.successThreshold | int | `1` |  |
 | readinessProbe.timeoutSeconds | int | `1` |  |
 | replicaCount | int | `1` | Number of replicas, only in use if autoscaling is disabled. |
-| resources.limits | object | `{"cpu":"1000m","memory":"1024Mi"}` | Limits are set to avoid resource based denial of service by default, adjust accordingly. |
+| resources.limits | object | `{"memory":"1024Mi"}` | Limits are set to avoid resource based denial of service by default, adjust accordingly. |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsNonRoot":true,"seccompProfile":{"type":"RuntimeDefault"}}` | An intentional strict default container context. Adjust accordingly. |
 | service.port | int | `80` |  |
 | service.type | string | `"ClusterIP"` |  |
