@@ -1,0 +1,158 @@
+{{- if (.Values.bootstrapJob | default dict).enabled }}
+{{- $healthPath := include "gzac-backend.bootstrapHealthPath" . }}
+{{- $name := include "gzac-backend.bootstrapName" . }}
+{{- $serviceAccount := include "gzac-backend.serviceAccountName" . }}
+{{- $hookServiceAccount := and .Values.serviceAccount.create (not (lookup "v1" "ServiceAccount" .Release.Namespace $serviceAccount)) }}
+{{- $hook := dict "helm.sh/hook" "pre-install,pre-upgrade" "helm.sh/hook-weight" "-1" "helm.sh/hook-delete-policy" "before-hook-creation,hook-succeeded" }}
+{{- /* Hooks run before the release's own ConfigMap, Secret and ServiceAccount are created or updated, so the Job gets hook copies */}}
+{{- $configMap := include (print $.Template.BasePath "/configmap.yaml") . | fromYaml }}
+{{- $_ := set $configMap "metadata" (dict "name" $name "labels" $configMap.metadata.labels "annotations" $hook) }}
+---
+{{ toYaml $configMap }}
+{{- if not .Values.existingSecret }}
+{{- $secret := include (print $.Template.BasePath "/secret.yaml") . | fromYaml }}
+{{- $_ := set $secret "metadata" (dict "name" $name "labels" $secret.metadata.labels "annotations" $hook) }}
+---
+{{ toYaml $secret }}
+{{- end }}
+{{- if $hookServiceAccount }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "gzac-backend.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml (merge (deepCopy $hook) (.Values.serviceAccount.annotations | default dict)) | nindent 4 }}
+automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
+{{- end }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "gzac-backend.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "0"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: {{ .Values.bootstrapJob.activeDeadlineSeconds }}
+  template:
+    metadata:
+      {{- with merge (deepCopy (.Values.bootstrapJob.podAnnotations | default dict)) (.Values.podAnnotations | default dict) }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- /* Not the selector labels: the Service must not route traffic to a pod that is still bootstrapping */}}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: bootstrap
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      restartPolicy: Never
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ if $hookServiceAccount }}{{ $name }}{{ else }}{{ $serviceAccount }}{{ end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-bootstrap
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - sh
+            - -c
+            - |
+              if command -v curl >/dev/null 2>&1; then
+                status() { curl -s -o /dev/null --max-time 5 -w '%{http_code}' "$1"; }
+              elif command -v wget >/dev/null 2>&1; then
+                status() { wget -S -T 5 -O /dev/null "$1" 2>&1 | awk '$1 ~ /^HTTP\// { code = $2 } END { print code ? code : "000" }'; }
+              else
+                echo "The bootstrap Job needs curl or wget in the image" >&2
+                exit 1
+              fi
+              if [ "$#" -gt 0 ]; then "$@" &
+              elif [ -f /app.war ]; then java -jar /app.war &
+              else java -jar /app.jar &
+              fi
+              app=$!
+              trap 'kill -TERM "$app" 2>/dev/null' TERM INT
+              while kill -0 "$app" 2>/dev/null; do
+                code=$(status {{ printf "http://localhost:8080%s/startup" $healthPath | squote }})
+                case "$code" in
+                  200)
+                    echo "Bootstrap complete, stopping gzac-backend"
+                    kill -TERM "$app"
+                    wait "$app"
+                    exit 0
+                    ;;
+                  000|503) ;;
+                  *)
+                    echo "{{ $healthPath }}/startup answered HTTP $code; the Job needs GZAC 13.43.0 or later, with bootstrapJob.healthPath on port 8080" >&2
+                    kill -TERM "$app"
+                    wait "$app"
+                    exit 1
+                    ;;
+                esac
+                sleep 5
+              done
+              wait "$app"
+              echo "gzac-backend exited with code $? before the bootstrap completed" >&2
+              exit 1
+            - bootstrap
+            {{- range .Values.bootstrapJob.command }}
+            - {{ . | quote }}
+            {{- end }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.existingSecret | default $name }}
+            - configMapRef:
+                name: {{ $name }}
+          env:
+            {{- /* The Job sets these two itself; Open Notificaties cannot call this pod back, so the gzac-backend pods register abonnementen */}}
+            {{- $extraEnvVars := include "gzac-backend.extraEnvVarsWithout" (dict "names" (list "VALTIMO_BOOTSTRAP_ENABLED" "VALTIMO_ZGW_REGISTERABONNEMENTEN") "context" $) }}
+            {{- if $extraEnvVars }}
+            {{- $extraEnvVars | nindent 12 }}
+            {{- end }}
+            - name: VALTIMO_BOOTSTRAP_ENABLED
+              value: "true"
+            - name: VALTIMO_ZGW_REGISTERABONNEMENTEN
+              value: "false"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: media
+              mountPath: {{ .Values.persistence.mountPath }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "gzac-backend.tplvalues.render" ( dict "value" .Values.extraVolumeMounts "context" $ ) | nindent 12 }}
+            {{- end }}
+      volumes:
+        {{- /* The release's PVC does not exist yet at pre-install, and the bootstrap keeps nothing on it */}}
+        - name: media
+          emptyDir: { }
+        {{- if .Values.extraVolumes }}
+        {{- include "gzac-backend.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $ ) | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

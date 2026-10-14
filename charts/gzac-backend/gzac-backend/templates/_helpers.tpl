@@ -61,6 +61,61 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{/*
+Name of the bootstrap Job and of the hook resources it uses
+*/}}
+{{- define "gzac-backend.bootstrapName" -}}
+{{- printf "%s-bootstrap" (include "gzac-backend.fullname" . | trunc 53 | trimSuffix "-") }}
+{{- end }}
+
+{{/*
+bootstrapJob.healthPath with one leading slash and no trailing one
+*/}}
+{{- define "gzac-backend.bootstrapHealthPath" -}}
+{{- printf "/%s" (required "bootstrapJob.healthPath is not set: `helm upgrade --reuse-values` keeps the values of a chart without bootstrapJob, so use --reset-then-reuse-values" .Values.bootstrapJob.healthPath | trimAll "/") }}
+{{- end }}
+
+{{/*
+A probe, with its httpGet path moved to the bootstrap-aware health group when bootstrapJob is enabled
+*/}}
+{{- define "gzac-backend.probe" -}}
+{{- $probe := deepCopy .probe }}
+{{- if and (.context.Values.bootstrapJob | default dict).enabled $probe.httpGet }}
+{{- $_ := set $probe.httpGet "path" (printf "%s/%s" (include "gzac-backend.bootstrapHealthPath" .context) .group) }}
+{{- end }}
+{{- toYaml $probe }}
+{{- end }}
+
+{{/*
+extraEnvVars rendered without the entries named in .names
+*/}}
+{{- define "gzac-backend.extraEnvVarsWithout" -}}
+{{- $env := .context.Values.extraEnvVars }}
+{{- if kindIs "slice" $env }}
+{{- $kept := list }}
+{{- range $env }}
+{{- if not (has (toString .name) $.names) }}
+{{- $kept = append $kept . }}
+{{- end }}
+{{- end }}
+{{- $env = $kept }}
+{{- end }}
+{{- if $env }}
+{{- include "gzac-backend.tplvalues.render" (dict "value" $env "context" .context) }}
+{{- end }}
+{{- end }}
+
+{{/*
+"true" when extraEnvVars sets the variable .name
+*/}}
+{{- define "gzac-backend.extraEnvVarsSet" -}}
+{{- if kindIs "slice" .context.Values.extraEnvVars }}
+{{- range .context.Values.extraEnvVars }}
+{{- if eq (toString .name) $.name }}true{{ end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Renders a value that contains template.

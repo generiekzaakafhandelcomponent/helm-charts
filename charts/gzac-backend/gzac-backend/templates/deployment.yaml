@@ -49,6 +49,10 @@ spec:
             - configMapRef:
                 name: {{ include "gzac-backend.fullname" . }}
           env:
+            {{- if and (.Values.bootstrapJob | default dict).enabled (not (include "gzac-backend.extraEnvVarsSet" (dict "name" "VALTIMO_BOOTSTRAP_ENABLED" "context" $))) }}
+            - name: VALTIMO_BOOTSTRAP_ENABLED
+              value: "false"
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "gzac-backend.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -62,7 +66,7 @@ spec:
 
           {{- with .Values.startupProbe }}
           startupProbe:
-            {{- toYaml . | nindent 12 }}
+            {{- include "gzac-backend.probe" (dict "probe" . "group" "startup" "context" $) | nindent 12 }}
           {{- end }}
 
           {{- with .Values.livenessProbe }}
@@ -72,7 +76,7 @@ spec:
 
           {{- with .Values.readinessProbe }}
           readinessProbe:
-            {{- toYaml . | nindent 12 }}
+            {{- include "gzac-backend.probe" (dict "probe" . "group" "readiness" "context" $) | nindent 12 }}
           {{- end }}
 
           resources:

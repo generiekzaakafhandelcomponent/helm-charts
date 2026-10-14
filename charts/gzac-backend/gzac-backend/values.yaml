@@ -113,6 +113,30 @@ readinessProbe:
   # -- Failure threshold for readinessProbe
   failureThreshold: 3
 
+bootstrapJob:
+  # -- Run the bootstrap (database migrations and autodeployments) once, in a Job, before every install and upgrade.
+  # The gzac-backend pods then start with `valtimo.bootstrap.enabled=false`, and their startupProbe and readinessProbe wait on the bootstrap-aware health groups.
+  # Requires GZAC 13.43.0 or later, and an image with `sh` and `curl` or `wget`, as the gzac-backend image and images built from gzac-backend-template have.
+  # The Job is a Helm `pre-install,pre-upgrade` hook: pass `--timeout` longer than `activeDeadlineSeconds` (Helm waits 5 minutes by default),
+  # and `--rollback-on-failure` (Helm 4) or `--atomic` (Helm 3) to return to the previous revision when the bootstrap fails.
+  # The database and Keycloak must be reachable before the release is installed, because the hook runs before anything else in it.
+  # A Job that failed is kept for inspection and removed by the next attempt, not by `helm uninstall`.
+  # The Job pod carries `podLabels`, `app.kubernetes.io/instance` and `app.kubernetes.io/component: bootstrap`, but not `app.kubernetes.io/name`, so the Service never routes to it; a NetworkPolicy must select it by one of the others.
+  # Tools that render with `helm template`, such as Argo CD, run the Job on every sync, and cannot see the cluster.
+  # With `serviceAccount.create`, until the chart's own ServiceAccount exists (a first install, a retry of a failed one, or under such tools), the Job runs as a separate `<fullname>-bootstrap` ServiceAccount with the same annotations.
+  # Cloud identity bound to the ServiceAccount's name must then trust that name too, or set `serviceAccount.create=false` and create the account beforehand.
+  enabled: false
+  # -- Seconds the bootstrap may take before the Job, and with it the install or upgrade, fails
+  activeDeadlineSeconds: 900
+  # -- The command that starts gzac-backend in the Job. Empty runs `java -jar /app.war`, or `java -jar /app.jar` when the image has no `/app.war`,
+  # which covers the gzac-backend image and images built from gzac-backend-template. Set it when your image starts differently.
+  command: []
+  # -- Base path of the actuator health endpoint. The Job waits on `<healthPath>/startup` on port 8080, and the pods' probes use `<healthPath>/startup` and `<healthPath>/readiness` on their own port
+  healthPath: /actuator/health
+  # -- Annotations for the bootstrap Job pod, on top of `podAnnotations`.
+  # An injected sidecar that keeps running (a service mesh proxy, a Vault agent) stops the Job from completing; switch it off here, e.g. `sidecar.istio.io/inject: "false"`.
+  podAnnotations: {}
+
 # -- Resources for gzac-backend
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

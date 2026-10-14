@@ -1,0 +1,145 @@
+suite: gzac-backend Deployment with the bootstrap Job
+templates:
+  - templates/deployment.yaml
+  - templates/configmap.yaml
+  - templates/secret.yaml
+release:
+  name: rel
+set:
+  settings.keycloak.version: "26.2.5"
+  settings.keycloak.authServerURL: https://keycloak.example.test
+tests:
+  - it: leaves the pods' environment and probes as they were when bootstrapJob is not enabled
+    template: templates/deployment.yaml
+    asserts:
+      - isNullOrEmpty:
+          path: spec.template.spec.containers[0].env
+      - equal:
+          path: spec.template.spec.containers[0].startupProbe.httpGet.path
+          value: /api/v1/ping
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.httpGet.path
+          value: /api/v1/ping
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.httpGet.path
+          value: /api/v1/ping
+
+  - it: renders as before for a release upgraded with --reuse-values from a chart without bootstrapJob
+    template: templates/deployment.yaml
+    set:
+      bootstrapJob: null
+    asserts:
+      - isNullOrEmpty:
+          path: spec.template.spec.containers[0].env
+      - equal:
+          path: spec.template.spec.containers[0].startupProbe.httpGet.path
+          value: /api/v1/ping
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.httpGet.path
+          value: /api/v1/ping
+
+  - it: says what to do when it is switched on with --reuse-values from a chart without bootstrapJob
+    template: templates/deployment.yaml
+    set:
+      bootstrapJob:
+        enabled: true
+        activeDeadlineSeconds: null
+        healthPath: null
+        podAnnotations: null
+        command: null
+    asserts:
+      - failedTemplate:
+          errorPattern: "bootstrapJob.healthPath is not set: `helm upgrade --reuse-values` keeps the values of a chart without bootstrapJob, so use --reset-then-reuse-values"
+
+  - it: starts the pods with the bootstrap off, ahead of extraEnvVars
+    template: templates/deployment.yaml
+    set:
+      bootstrapJob.enabled: true
+      extraEnvVars:
+        - name: FOO
+          value: bar
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env
+          value:
+            - name: VALTIMO_BOOTSTRAP_ENABLED
+              value: "false"
+            - name: FOO
+              value: bar
+
+  - it: leaves VALTIMO_BOOTSTRAP_ENABLED to extraEnvVars when it already sets it, without duplicate names
+    template: templates/deployment.yaml
+    set:
+      bootstrapJob.enabled: true
+      extraEnvVars:
+        - name: VALTIMO_BOOTSTRAP_ENABLED
+          value: "false"
+        - name: FOO
+          value: bar
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env
+          value:
+            - name: VALTIMO_BOOTSTRAP_ENABLED
+              value: "false"
+            - name: FOO
+              value: bar
+
+  - it: points startup and readiness at the bootstrap-aware health groups, keeping port and timings
+    template: templates/deployment.yaml
+    set:
+      bootstrapJob.enabled: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].startupProbe
+          value:
+            httpGet:
+              path: /actuator/health/startup
+              port: 8080
+            failureThreshold: 90
+            periodSeconds: 10
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe
+          value:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            failureThreshold: 3
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.httpGet.path
+          value: /api/v1/ping
+
+  - it: uses bootstrapJob.healthPath, with or without slashes at either end, and the probe's own port
+    template: templates/deployment.yaml
+    set:
+      bootstrapJob.enabled: true
+      bootstrapJob.healthPath: management/health/
+      readinessProbe.httpGet.port: 8081
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].startupProbe.httpGet.path
+          value: /management/health/startup
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.httpGet
+          value:
+            path: /management/health/readiness
+            port: 8081
+
+  - it: leaves a probe without httpGet as configured
+    template: templates/deployment.yaml
+    set:
+      bootstrapJob.enabled: true
+      startupProbe:
+        httpGet: null
+        tcpSocket:
+          port: 8080
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].startupProbe
+          value:
+            tcpSocket:
+              port: 8080
+            failureThreshold: 90
+            periodSeconds: 10

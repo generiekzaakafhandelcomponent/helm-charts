@@ -1,0 +1,13 @@
+suite: helm test hook
+templates:
+  - templates/tests/test-connection.yaml
+release:
+  name: rel
+tests:
+  - it: is still packaged with the chart
+    asserts:
+      - isKind:
+          of: Pod
+      - equal:
+          path: metadata.annotations["helm.sh/hook"]
+          value: test

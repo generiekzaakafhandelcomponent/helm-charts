@@ -1,0 +1,436 @@
+suite: bootstrap Job
+templates:
+  - templates/bootstrap-job.yaml
+  - templates/configmap.yaml
+  - templates/secret.yaml
+release:
+  name: rel
+  namespace: gzac
+set:
+  settings.keycloak.version: "26.2.5"
+  settings.keycloak.authServerURL: https://keycloak.example.test
+tests:
+  - it: renders nothing when bootstrapJob is not enabled
+    template: templates/bootstrap-job.yaml
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders nothing for a release upgraded with --reuse-values from a chart without bootstrapJob
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob: null
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: says what to do when it is switched on with --reuse-values from a chart without bootstrapJob
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob:
+        enabled: true
+        activeDeadlineSeconds: null
+        healthPath: null
+        podAnnotations: null
+        command: null
+    asserts:
+      - failedTemplate:
+          errorPattern: "bootstrapJob.healthPath is not set: `helm upgrade --reuse-values` keeps the values of a chart without bootstrapJob, so use --reset-then-reuse-values"
+
+  - it: runs the bootstrap in a pre-install,pre-upgrade hook Job that fails without retrying
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - equal:
+          path: metadata.annotations["helm.sh/hook"]
+          value: pre-install,pre-upgrade
+      - equal:
+          path: metadata.annotations["helm.sh/hook-weight"]
+          value: "0"
+      - equal:
+          path: spec.backoffLimit
+          value: 0
+      - equal:
+          path: spec.activeDeadlineSeconds
+          value: 900
+      - equal:
+          path: spec.template.spec.restartPolicy
+          value: Never
+
+  - it: removes every hook resource once the hooks succeed, and a failed attempt's before the next one
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 4
+      - equal:
+          path: metadata.annotations["helm.sh/hook-delete-policy"]
+          value: before-hook-creation,hook-succeeded
+      - equal:
+          path: metadata.annotations["helm.sh/hook"]
+          value: pre-install,pre-upgrade
+
+  - it: starts the Job's resources before the Job itself
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+    asserts:
+      - equal:
+          path: metadata.annotations["helm.sh/hook-weight"]
+          value: "-1"
+        documentSelector:
+          path: kind
+          value: ConfigMap
+
+  - it: waits for the startup health group, with curl or else wget, and stops the app once it is UP
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].command[0]
+          value: sh
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: "elif \\[ -f /app.war \\]; then java -jar /app.war &\\n\\s*else java -jar /app.jar &"
+      - equal:
+          path: spec.template.spec.containers[0].command[3]
+          value: bootstrap
+      - lengthEqual:
+          path: spec.template.spec.containers[0].command
+          count: 4
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: "code=\\$\\(status 'http://localhost:8080/actuator/health/startup'\\)"
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: "elif command -v wget >/dev/null 2>&1; then\\n\\s+status\\(\\) \\{ wget -S -T 5 -O /dev/null"
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: "200\\)\\n\\s+echo \"Bootstrap complete, stopping gzac-backend\"\\n\\s+kill -TERM \"\\$app\"\\n\\s+wait \"\\$app\"\\n\\s+exit 0"
+
+  - it: starts the app with bootstrapJob.command when it is set, passed as arguments rather than shell text
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+      bootstrapJob.command:
+        - java
+        - -jar
+        - /opt/app/my app.jar
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: "if \\[ \"\\$#\" -gt 0 \\]; then \"\\$@\" &"
+      - lengthEqual:
+          path: spec.template.spec.containers[0].command
+          count: 7
+      - equal:
+          path: spec.template.spec.containers[0].command[3]
+          value: bootstrap
+      - equal:
+          path: spec.template.spec.containers[0].command[4]
+          value: java
+      - equal:
+          path: spec.template.spec.containers[0].command[6]
+          value: /opt/app/my app.jar
+
+  - it: waits on the startup group under bootstrapJob.healthPath, with or without slashes at either end
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+      bootstrapJob.healthPath: management/health/
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].command[2]
+          pattern: "status 'http://localhost:8080/management/health/startup'"
+
+  - it: runs the Job with the bootstrap on and abonnement registration off, whatever extraEnvVars says, without duplicate names
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+      extraEnvVars:
+        - name: VALTIMO_BOOTSTRAP_ENABLED
+          value: "false"
+        - name: FOO
+          value: "{{ .Release.Name }}"
+        - name: VALTIMO_ZGW_REGISTERABONNEMENTEN
+          value: "true"
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env
+          value:
+            - name: FOO
+              value: rel
+            - name: VALTIMO_BOOTSTRAP_ENABLED
+              value: "true"
+            - name: VALTIMO_ZGW_REGISTERABONNEMENTEN
+              value: "false"
+
+  - it: reads its environment from hook copies of the release's ConfigMap and Secret
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+      settings.spring.datasource.password: s3cret
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].envFrom
+          value:
+            - secretRef:
+                name: rel-gzac-backend-bootstrap
+            - configMapRef:
+                name: rel-gzac-backend-bootstrap
+        documentSelector:
+          path: kind
+          value: Job
+      - equal:
+          path: data.VALTIMO_DATABASE
+          value: postgres
+        documentSelector:
+          path: kind
+          value: ConfigMap
+      - equal:
+          path: data.KEYCLOAK_AUTH_SERVER_URL
+          value: https://keycloak.example.test
+        documentSelector:
+          path: kind
+          value: ConfigMap
+      - equal:
+          path: data.SPRING_DATASOURCE_PASSWORD
+          value: czNjcmV0
+        documentSelector:
+          path: kind
+          value: Secret
+      - equal:
+          path: metadata.name
+          value: rel-gzac-backend-bootstrap
+        documentSelector:
+          path: kind
+          value: Secret
+
+  - it: reads existingSecret directly and makes no Secret copy
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+      existingSecret: my-secret
+    asserts:
+      - hasDocuments:
+          count: 3
+      - equal:
+          path: spec.template.spec.containers[0].envFrom[0].secretRef.name
+          value: my-secret
+        documentSelector:
+          path: kind
+          value: Job
+
+  - it: runs as its own hook ServiceAccount, with the same annotations, while the chart's does not exist yet
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+      serviceAccount.annotations:
+        eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/example
+    asserts:
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: rel-gzac-backend-bootstrap
+        documentSelector:
+          path: kind
+          value: Job
+      - equal:
+          path: metadata.annotations["eks.amazonaws.com/role-arn"]
+          value: arn:aws:iam::123456789012:role/example
+        documentSelector:
+          path: kind
+          value: ServiceAccount
+      - equal:
+          path: metadata.annotations["helm.sh/hook"]
+          value: pre-install,pre-upgrade
+        documentSelector:
+          path: kind
+          value: ServiceAccount
+      - equal:
+          path: automountServiceAccountToken
+          value: false
+        documentSelector:
+          path: kind
+          value: ServiceAccount
+
+  - it: retrying a failed first install, which Helm runs as an upgrade, still uses the hook ServiceAccount
+    template: templates/bootstrap-job.yaml
+    release:
+      upgrade: true
+    set:
+      bootstrapJob.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 4
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: rel-gzac-backend-bootstrap
+        documentSelector:
+          path: kind
+          value: Job
+
+  - it: runs as the release's ServiceAccount once it exists
+    template: templates/bootstrap-job.yaml
+    release:
+      upgrade: true
+    set:
+      bootstrapJob.enabled: true
+    kubernetesProvider:
+      scheme:
+        "v1/ServiceAccount":
+          gvr:
+            version: "v1"
+            resource: "serviceaccounts"
+          namespaced: true
+      objects:
+        - kind: ServiceAccount
+          apiVersion: v1
+          metadata:
+            name: rel-gzac-backend
+            namespace: gzac
+    asserts:
+      - hasDocuments:
+          count: 3
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: rel-gzac-backend
+        documentSelector:
+          path: kind
+          value: Job
+
+  - it: runs as an existing ServiceAccount when the chart does not create one
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+      serviceAccount.create: false
+      serviceAccount.name: existing-sa
+    asserts:
+      - hasDocuments:
+          count: 3
+      - equal:
+          path: spec.template.spec.serviceAccountName
+          value: existing-sa
+        documentSelector:
+          path: kind
+          value: Job
+
+  - it: keeps the Job pod out of the Service, with podLabels and podAnnotations plus bootstrapJob.podAnnotations
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+      podLabels:
+        azure.workload.identity/use: "true"
+      podAnnotations:
+        vault.hashicorp.com/agent-inject: "true"
+        sidecar.istio.io/inject: "true"
+      bootstrapJob.podAnnotations:
+        sidecar.istio.io/inject: "false"
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/instance: rel
+            app.kubernetes.io/component: bootstrap
+            azure.workload.identity/use: "true"
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            vault.hashicorp.com/agent-inject: "true"
+            sidecar.istio.io/inject: "false"
+
+  - it: renders when the operator's annotation maps are empty in their values file
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+      bootstrapJob.podAnnotations: null
+      podAnnotations: null
+      serviceAccount.annotations: null
+    asserts:
+      - hasDocuments:
+          count: 4
+      - notExists:
+          path: spec.template.metadata.annotations
+        documentSelector:
+          path: kind
+          value: Job
+      - equal:
+          path: metadata.annotations["helm.sh/hook"]
+          value: pre-install,pre-upgrade
+        documentSelector:
+          path: kind
+          value: ServiceAccount
+
+  - it: mounts media as an emptyDir and the operator's extra volumes, also with persistence on
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+      persistence.enabled: true
+      extraVolumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+      extraVolumeMounts:
+        - name: secrets-store-inline
+          mountPath: /var/run/secrets/secrets-store
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes
+          value:
+            - name: media
+              emptyDir: {}
+            - name: secrets-store-inline
+              csi:
+                driver: secrets-store.csi.k8s.io
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts
+          value:
+            - name: media
+              mountPath: /tmp
+            - name: secrets-store-inline
+              mountPath: /var/run/secrets/secrets-store
+
+  - it: runs the gzac-backend image with its security context
+    template: templates/bootstrap-job.yaml
+    set:
+      bootstrapJob.enabled: true
+      image.tag: 13.50.0
+      imagePullSecrets:
+        - name: regcred
+    documentSelector:
+      path: kind
+      value: Job
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: ritense/gzac-backend:13.50.0
+      - equal:
+          path: spec.template.spec.imagePullSecrets
+          value:
+            - name: regcred
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.runAsNonRoot
+          value: true

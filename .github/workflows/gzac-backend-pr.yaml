@@ -23,6 +23,17 @@ jobs:
           cd charts/gzac-backend/gzac-backend
           helm lint
 
+  helm-unittest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the PR source branch
+        uses: actions/checkout@v4
+
+      - name: Helm unit tests
+        run: |
+          cd charts/gzac-backend/gzac-backend
+          docker run --rm --volume "$(pwd):/apps" helmunittest/helm-unittest:3.21.0-1.0.3 .
+
   add-readme-if-missing:
     runs-on: ubuntu-latest
     steps:
